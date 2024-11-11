@@ -4,7 +4,9 @@
 mkdir -p ~/dev/magnotechnology
 echo "Directories created successfully."
 
+# Install zsh
 sudo apt install -y zsh
+
 # Prompt user for password
 echo "Please enter your password for sudo commands."
 read -s -p "Password: " sudo_password
@@ -52,7 +54,7 @@ echo "Python versions installed successfully."
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 
 # Configure pnpm in .zshrc
-echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNPM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc
+echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc
 
 # Source .zshrc to apply pnpm changes
 source ~/.zshrc
@@ -78,7 +80,7 @@ git config --global core.excludesfile ~/.gitignore
 
 # Create SSH directory and generate key
 mkdir -p ~/.ssh
-cd ~/.ssh
+cd ~/.ssh || exit # Ensure we are in the directory or exit on error.
 ssh-keygen -t ed25519 -b 4096 -C "edgarben27@gmail.com" -f GitHub_Edd27 -N ""
 
 # Initialize SSH agent and add key
@@ -95,26 +97,25 @@ Host github.com
   IdentityFile ~/.ssh/GitHub_Edd27
 EOL
 
-# Copy the new SSH key to clipboard
-xclip -selection clipboard < GitHub_Edd27.pub
-echo "The SSH public key has been copied to your clipboard."
+# Copy the new SSH key to clipboard (ensure xclip is installed)
+xclip -selection clipboard < GitHub_Edd27.pub || echo "xclip not installed, unable to copy SSH key."
 
 # Prompt user to confirm if they have added the SSH key to their GitHub account
 read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
 
 if [[ "$ssh_added" == "yes" ]]; then
   # Test SSH connection to GitHub
-  ssh -T git@github.com
+  ssh -T git@github.com || echo "SSH connection test failed."
 else
   echo "Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
 fi
 
 echo "Git configurations set successfully."
 
-# Suppress login messages
+# Suppress login messages by creating a .hushlogin file.
 touch ~/.hushlogin
 
-# Add aliases to .zshrc
+# Add aliases to .zshrc for convenience.
 cat <<EOL >> ~/.zshrc
 
 # Custom aliases
@@ -132,7 +133,7 @@ EOL
 
 echo "Aliases added successfully."
 
-# Final shell restart to apply changes
+# Final shell restart to apply changes.
 exec "$SHELL"
 
 echo "Environment setup completed!"
