@@ -9,10 +9,14 @@ fi
 mkdir -p ~/dev/magnotechnology
 echo "Directories created successfully."
 
-
-# Prompt user for password
 sudo apt install -y zsh
-chsh -s "$(which zsh)"
+# Prompt user for password
+echo "Please enter your password for sudo commands."
+read -s -p "Password: " sudo_password
+echo
+
+# Use the password with sudo for set ZSH as default Shell
+echo "$sudo_password" | sudo -S chsh -s "$(which zsh)"
 echo "ZSH set as default shell."
 
 # Install Oh My Zsh
