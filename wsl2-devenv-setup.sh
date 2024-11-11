@@ -6,7 +6,7 @@ echo "Directories created successfully."
 
 # Set ZSH as default shell
 sudo apt install -y zsh
-chsh -s $(which zsh)
+chsh -s "$(which zsh)"
 echo "ZSH set as default shell."
 
 # Install Oh My Zsh
@@ -15,17 +15,17 @@ echo "Oh My Zsh installed successfully."
 
 # Install ZSH plugins
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
-git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
-git clone https://github.com/MichaelAquilina/zsh-you-should-use.git $ZSH_CUSTOM/plugins/you-should-use
-git clone https://github.com/fdellwing/zsh-bat.git $ZSH_CUSTOM/plugins/zsh-bat
+git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$ZSH_CUSTOM/plugins/you-should-use"
+git clone https://github.com/fdellwing/zsh-bat.git "$ZSH_CUSTOM/plugins/zsh-bat"
 
 # Update plugins in .zshrc
 sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
 echo "ZSH plugins updated successfully."
 
-# Restart shell
-exec "$SHELL"
+# Source .zshrc to apply changes immediately
+source ~/.zshrc
 
 # Install pyenv
 curl https://pyenv.run | bash
@@ -34,8 +34,8 @@ curl https://pyenv.run | bash
 echo -e '\n# pyenv\nexport PYENV_ROOT="$HOME/.pyenv"\n[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"\neval "$(pyenv init -)"\n# pyenv end\n' >> ~/.zshrc
 echo "pyenv configured successfully."
 
-# Restart shell
-exec "$SHELL"
+# Source .zshrc to apply pyenv changes
+source ~/.zshrc
 
 # Install Python versions using pyenv
 pyenv install 2
@@ -49,8 +49,8 @@ curl -fsSL https://get.pnpm.io/install.sh | sh -
 # Configure pnpm in .zshrc
 echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNPM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc
 
-# Restart shell
-exec "$SHELL"
+# Source .zshrc to apply pnpm changes
+source ~/.zshrc
 
 # Set Node.js version with pnpm
 pnpm -g env use 18
@@ -74,7 +74,7 @@ git config --global core.excludesfile ~/.gitignore
 # Create SSH directory and generate key
 mkdir -p ~/.ssh
 cd ~/.ssh
-ssh-keygen -t ed25519 -b 4096 -C "edgarben27@gmail.com" -f GitHub_Edd27
+ssh-keygen -t ed25519 -b 4096 -C "edgarben27@gmail.com" -f GitHub_Edd27 -N ""
 
 # Initialize SSH agent and add key
 eval "$(ssh-agent -s)"
