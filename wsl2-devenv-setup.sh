@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Create work directories if they do not exist
+mkdir -p ~/dev/magnotechnology
+
 # Update and install utilities
 sudo apt update && sudo apt upgrade -y
 sudo apt install -y wget curl git unzip bat zsh neofetch xclip build-essential libssl-dev zlib1g-dev \
