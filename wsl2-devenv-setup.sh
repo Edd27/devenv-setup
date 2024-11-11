@@ -6,7 +6,7 @@ echo "Directories created successfully."
 
 # Set ZSH as default shell
 sudo apt install -y zsh
-chsh -s "$(which zsh)"
+sudo chsh -s "$(which zsh)"
 echo "ZSH set as default shell."
 
 # Install Oh My Zsh
