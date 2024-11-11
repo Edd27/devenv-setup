@@ -1,9 +1,4 @@
 #!/bin/bash
-# Ensure script is running in interactive mode
-if [[ $- != *i* ]]; then
-  echo "Script must be run in an interactive shell."
-  exit 1
-fi
 
 # Create work directories if they do not exist
 mkdir -p ~/dev/magnotechnology
