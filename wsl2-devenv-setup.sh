@@ -4,15 +4,8 @@
 mkdir -p ~/dev/magnotechnology
 echo "Directories created successfully."
 
-
-# Update and install utilities
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y wget curl git unzip bat zsh neofetch xclip build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
-    libffi-dev liblzma-dev
-echo "Utilities installed successfully."
-
 # Set ZSH as default shell
+sudo apt install -y zsh
 chsh -s $(which zsh)
 echo "ZSH set as default shell."
 
