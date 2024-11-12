@@ -7,26 +7,26 @@ echo
 
 # Install ZSH plugins
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
-git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions" > /dev/null
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" > /dev/null
-git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$ZSH_CUSTOM/plugins/you-should-use" > /dev/null
-git clone https://github.com/fdellwing/zsh-bat.git "$ZSH_CUSTOM/plugins/zsh-bat" > /dev/null
+git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions" > /dev/null 2>&1
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"> /dev/null 2>&1
+git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$ZSH_CUSTOM/plugins/you-should-use"> /dev/null 2>&1
+git clone https://github.com/fdellwing/zsh-bat.git "$ZSH_CUSTOM/plugins/zsh-bat"> /dev/null 2>&1
 echo "✔️ Plugins cloned successfully."
 echo
 
 # Update plugins in .zshrc
-sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc > /dev/null
+sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc > /dev/null 2>&1
 echo "✔️ ZSH plugins updated successfully."
 echo
 
 # Source .zshrc to apply changes immediately
-zsh -c "source ~/.zshrc" > /dev/null
+zsh -c "source ~/.zshrc" > /dev/null 2>&1
 
 # Install pyenv
-curl https://pyenv.run | bash
+curl https://pyenv.run | bash > /dev/null 2>&1
 
 # Configure pyenv in .zshrc
-echo -e '\n# pyenv\nexport PYENV_ROOT="$HOME/.pyenv"\n[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"\neval "$(pyenv init -)"\n# pyenv end\n' >> ~/.zshrc > /dev/null
+echo -e '\n# pyenv\nexport PYENV_ROOT="$HOME/.pyenv"\n[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"\neval "$(pyenv init -)"\n# pyenv end\n' >> ~/.zshrc > /dev/null 2>&1
 echo "✔️ pyenv configured successfully."
 echo
 
@@ -34,26 +34,26 @@ echo
 zsh -c "source ~/.zshrc" > /dev/null
 
 # Install Python versions using pyenv
-pyenv install 2 > /dev/null
-pyenv install 3 > /dev/null
-pyenv global 3 > /dev/null
+pyenv install 2 > /dev/null 2>&1
+pyenv install 3 > /dev/null 2>&1
+pyenv global 3 > /dev/null 2>&1
 echo "✔️ Python versions installed successfully."
 echo
 
 # Install pnpm
-curl -fsSL https://get.pnpm.io/install.sh | sh - > /dev/null
+curl -fsSL https://get.pnpm.io/install.sh | sh - > /dev/null 2>&1
 
 # Configure pnpm in .zshrc
-echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc > /dev/null
+echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc > /dev/null 2>&1
 
 # Source .zshrc to apply pnpm changes
-zsh -c "source ~/.zshrc" > /dev/null
+zsh -c "source ~/.zshrc" > /dev/null 2>&1
 
 # Set Node.js version with pnpm
-pnpm -g env use 18 > /dev/null
+pnpm -g env use 18 > /dev/null 2>&1
 
 # Install corepack globally
-pnpm add -g corepack > /dev/null
+pnpm add -g corepack > /dev/null 2>&1
 echo "✔️ pnpm installed successfully."
 echo
 
@@ -61,22 +61,22 @@ echo
 touch ~/.gitignore
 
 # Set Git global configurations
-git config --global user.name "Edgar Benavides" > /dev/null
-git config --global user.email "edgarben27@gmail.com" > /dev/null
-git config --global core.editor "code --wait" > /dev/null
-git config --global core.autocrlf input > /dev/null
-git config --global init.defaultbranch main > /dev/null
-git config --global core.fileMode false > /dev/null
-git config --global core.excludesfile ~/.gitignore > /dev/null
+git config --global user.name "Edgar Benavides" > /dev/null 2>&1
+git config --global user.email "edgarben27@gmail.com" > /dev/null 2>&1
+git config --global core.editor "code --wait" > /dev/null 2>&1
+git config --global core.autocrlf input > /dev/null 2>&1
+git config --global init.defaultbranch main > /dev/null 2>&1
+git config --global core.fileMode false > /dev/null 2>&1
+git config --global core.excludesfile ~/.gitignore > /dev/null 2>&1
 
 # Create SSH directory and generate key
-mkdir -p ~/.ssh > /dev/null
+mkdir -p ~/.ssh > /dev/null 2>&1
 cd ~/.ssh || exit # Ensure we are in the directory or exit on error.
-ssh-keygen -t ed25519 -b 4096 -C "edgarben27@gmail.com" -f GitHub_Edd27 -N "" > /dev/null
+ssh-keygen -t ed25519 -b 4096 -C "edgarben27@gmail.com" -f GitHub_Edd27 -N "" > /dev/null 2>&1
 
 # Initialize SSH agent and add key
-eval "$(ssh-agent -s)" > /dev/null
-ssh-add GitHub_Edd27 > /dev/null
+eval "$(ssh-agent -s)" > /dev/null 2>&1
+ssh-add GitHub_Edd27 > /dev/null 2>&1
 
 # Add SSH config for GitHub Account
 cat <<EOL > ~/.ssh/config
@@ -86,10 +86,10 @@ Host github.com
   PreferredAuthentications publickey
   AddKeysToAgent yes
   IdentityFile ~/.ssh/GitHub_Edd27
-EOL > /dev/null
+EOL
 
 # Copy the new SSH key to clipboard (ensure xclip is installed)
-xclip -selection clipboard < GitHub_Edd27.pub || echo "xclip not installed, unable to copy SSH key." > /dev/null
+xclip -selection clipboard < GitHub_Edd27.pub || echo "xclip not installed, unable to copy SSH key." > /dev/null 2>&1
 
 # Prompt user to confirm if they have added the SSH key to their GitHub account
 read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
@@ -121,7 +121,7 @@ alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset 
 alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
 alias rclaro="cd ~/dev/magnotechnology/render-claro-co && pyenv shell 2 && code ."
 alias apiclaro="cd ~/dev/magnotechnology/api-claro-co && pyenv shell 2 && code ."
-EOL > /dev/null
+EOL
 
 echo "✔️ Aliases added successfully."
 echo
