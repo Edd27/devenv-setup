@@ -131,6 +131,8 @@ echo
 echo "✔️ Aliases added successfully."
 echo
 
+cd ~
+
 echo "🎉 Environment setup completed!"
 
 # Final shell restart to apply changes.
