@@ -15,45 +15,45 @@ echo "✔️ Plugins cloned successfully."
 echo
 
 # Update plugins in .zshrc
-sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc > /dev/null 2>&1
+sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
 echo "✔️ ZSH plugins updated successfully."
 echo
 
 # Source .zshrc to apply changes immediately
-zsh -c "source ~/.zshrc" > /dev/null 2>&1
+zsh -c "source ~/.zshrc"
 
 # Install pyenv
-curl https://pyenv.run | bash > /dev/null 2>&1
+curl https://pyenv.run | bash
 
 # Configure pyenv in .zshrc
-echo -e '\n# pyenv\nexport PYENV_ROOT="$HOME/.pyenv"\n[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"\neval "$(pyenv init -)"\n# pyenv end\n' >> ~/.zshrc > /dev/null 2>&1
+echo -e '\n# pyenv\nexport PYENV_ROOT="$HOME/.pyenv"\n[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"\neval "$(pyenv init -)"\n# pyenv end\n' >> ~/.zshrc
 echo "✔️ pyenv configured successfully."
 echo
 
 # Source .zshrc to apply pyenv changes
-zsh -c "source ~/.zshrc" > /dev/null
+zsh -c "source ~/.zshrc"
 
 # Install Python versions using pyenv
-pyenv install 2 > /dev/null 2>&1
-pyenv install 3 > /dev/null 2>&1
-pyenv global 3 > /dev/null 2>&1
+pyenv install 2
+pyenv install 3
+pyenv global 3
 echo "✔️ Python versions installed successfully."
 echo
 
 # Install pnpm
-curl -fsSL https://get.pnpm.io/install.sh | sh - > /dev/null 2>&1
+curl -fsSL https://get.pnpm.io/install.sh | sh -
 
 # Configure pnpm in .zshrc
-echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc > /dev/null 2>&1
+echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc
 
 # Source .zshrc to apply pnpm changes
-zsh -c "source ~/.zshrc" > /dev/null 2>&1
+zsh -c "source ~/.zshrc"
 
 # Set Node.js version with pnpm
-pnpm -g env use 18 > /dev/null 2>&1
+pnpm -g env use 18
 
 # Install corepack globally
-pnpm add -g corepack > /dev/null 2>&1
+pnpm add -g corepack
 echo "✔️ pnpm installed successfully."
 echo
 
@@ -61,22 +61,22 @@ echo
 touch ~/.gitignore
 
 # Set Git global configurations
-git config --global user.name "Edgar Benavides" > /dev/null 2>&1
-git config --global user.email "edgarben27@gmail.com" > /dev/null 2>&1
-git config --global core.editor "code --wait" > /dev/null 2>&1
-git config --global core.autocrlf input > /dev/null 2>&1
-git config --global init.defaultbranch main > /dev/null 2>&1
-git config --global core.fileMode false > /dev/null 2>&1
-git config --global core.excludesfile ~/.gitignore > /dev/null 2>&1
+git config --global user.name "Edgar Benavides"
+git config --global user.email "edgarben27@gmail.com"
+git config --global core.editor "code --wait"
+git config --global core.autocrlf input
+git config --global init.defaultbranch main
+git config --global core.fileMode false
+git config --global core.excludesfile ~/.gitignore
 
 # Create SSH directory and generate key
-mkdir -p ~/.ssh > /dev/null 2>&1
+mkdir -p ~/.ssh
 cd ~/.ssh || exit # Ensure we are in the directory or exit on error.
-ssh-keygen -t ed25519 -b 4096 -C "edgarben27@gmail.com" -f GitHub_Edd27 -N "" > /dev/null 2>&1
+ssh-keygen -t ed25519 -b 4096 -C "edgarben27@gmail.com" -f GitHub_Edd27 -N ""
 
 # Initialize SSH agent and add key
-eval "$(ssh-agent -s)" > /dev/null 2>&1
-ssh-add GitHub_Edd27 > /dev/null 2>&1
+eval "$(ssh-agent -s)"
+ssh-add GitHub_Edd27
 
 # Add SSH config for GitHub Account
 cat <<EOL > ~/.ssh/config
@@ -89,7 +89,7 @@ Host github.com
 EOL
 
 # Copy the new SSH key to clipboard (ensure xclip is installed)
-xclip -selection clipboard < GitHub_Edd27.pub || echo "xclip not installed, unable to copy SSH key." > /dev/null 2>&1
+xclip -selection clipboard < GitHub_Edd27.pub || echo "xclip not installed, unable to copy SSH key."
 
 # Prompt user to confirm if they have added the SSH key to their GitHub account
 read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
