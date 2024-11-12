@@ -10,3 +10,6 @@ sudo apt install -y wget zsh git unzip bat neofetch xclip build-essential libssl
 
 # Install Oh My ZSH
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# Set ZSH as default shell
+chsh -s $(which zsh)
