@@ -92,13 +92,14 @@ EOL
 xclip -selection clipboard < GitHub_Edd27.pub || echo "xclip not installed, unable to copy SSH key."
 
 # Prompt user to confirm if they have added the SSH key to their GitHub account
-read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
+read -q "ssh_added?Have you added the SSH key to your GitHub account? (yes/no): "
+echo
 
-if [[ "$ssh_added" == "yes" ]]; then
-  # Test SSH connection to GitHub
-  ssh -T git@github.com
+if [[ "$ssh_added" == "y" ]]; then
+    # Test SSH connection to GitHub
+    ssh -T git@github.com
 else
-  echo "Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
+    echo "Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
 fi
 
 echo "✔️ Git configurations set successfully."
