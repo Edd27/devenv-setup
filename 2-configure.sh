@@ -96,7 +96,7 @@ read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_adde
 
 if [[ "$ssh_added" == "yes" ]]; then
   # Test SSH connection to GitHub
-  ssh -T git@github.com || echo "SSH connection test failed."
+  ssh -T git@github.com
 else
   echo "Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
 fi
