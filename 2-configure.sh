@@ -2,7 +2,9 @@
 
 # Create work directories if they do not exist
 mkdir -p ~/dev/magnotechnology
-echo "Directories created successfully."
+echo
+echo "✔️ Work directories created successfully."
+echo
 
 # Install ZSH plugins
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
@@ -13,7 +15,9 @@ git clone https://github.com/fdellwing/zsh-bat.git "$ZSH_CUSTOM/plugins/zsh-bat"
 
 # Update plugins in .zshrc
 sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
-echo "ZSH plugins updated successfully."
+echo
+echo "✔️ ZSH plugins updated successfully."
+echo
 
 # Source .zshrc to apply changes immediately
 zsh -c "source ~/.zshrc"
@@ -23,7 +27,9 @@ curl https://pyenv.run | bash
 
 # Configure pyenv in .zshrc
 echo -e '\n# pyenv\nexport PYENV_ROOT="$HOME/.pyenv"\n[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"\neval "$(pyenv init -)"\n# pyenv end\n' >> ~/.zshrc
-echo "pyenv configured successfully."
+echo
+echo "✔️ pyenv configured successfully."
+echo
 
 # Source .zshrc to apply pyenv changes
 zsh -c "source ~/.zshrc"
@@ -32,7 +38,9 @@ zsh -c "source ~/.zshrc"
 pyenv install 2
 pyenv install 3
 pyenv global 3
-echo "Python versions installed successfully."
+echo
+echo "✔️ Python versions installed successfully."
+echo
 
 # Install pnpm
 curl -fsSL https://get.pnpm.io/install.sh | sh -
@@ -48,7 +56,9 @@ pnpm -g env use 18
 
 # Install corepack globally
 pnpm add -g corepack
-echo "pnpm installed successfully."
+echo
+echo "✔️ pnpm installed successfully."
+echo
 
 # Create global .gitignore
 touch ~/.gitignore
@@ -94,7 +104,9 @@ else
   echo "Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
 fi
 
-echo "Git configurations set successfully."
+echo
+echo "✔️ Git configurations set successfully."
+echo
 
 # Suppress login messages by creating a .hushlogin file.
 touch ~/.hushlogin
@@ -115,9 +127,13 @@ alias rclaro="cd ~/dev/magnotechnology/render-claro-co && pyenv shell 2 && code 
 alias apiclaro="cd ~/dev/magnotechnology/api-claro-co && pyenv shell 2 && code ."
 EOL
 
-echo "Aliases added successfully."
+echo
+echo "✔️ Aliases added successfully."
+echo
+
+echo "🎉 Environment setup completed!"
 
 # Final shell restart to apply changes.
 exec "$SHELL"
 
-echo "Environment setup completed!"
+
