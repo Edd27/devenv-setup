@@ -16,11 +16,11 @@ if ! grep -Fxq "$(which zsh)" /etc/shells; then
   sudo sh -c 'echo $(which zsh) >> /etc/shells'
 fi
 
-# Set zsh as the default shell
-chsh -s $(which zsh)
-
-echo "zsh has been set as the default shell. Please log out and log back in for changes to take effect."
+read -s -p "Password: " sudo_password
 echo
+
+echo "$sudo_password" | sudo -S chsh -s "$(which zsh)"
+echo "ZSH set as default shell."
 
 # Configure development environment
 curl -fsSL https://raw.githubusercontent.com/Edd27/wsl2-devenv-setup/main/2-configure.sh | bash
