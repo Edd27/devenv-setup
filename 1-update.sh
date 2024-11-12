@@ -20,3 +20,7 @@ fi
 chsh -s $(which zsh)
 
 echo "zsh has been set as the default shell. Please log out and log back in for changes to take effect."
+echo
+
+# Configure development environment
+curl -fsSL https://raw.githubusercontent.com/Edd27/wsl2-devenv-setup/main/2-configure.sh | bash
