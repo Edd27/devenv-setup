@@ -11,5 +11,12 @@ sudo apt install -y wget zsh git unzip bat neofetch xclip build-essential libssl
 # Install Oh My ZSH
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-# Set ZSH as default shell
+# Add zsh to allowed shells if not already added
+if ! grep -Fxq "$(which zsh)" /etc/shells; then
+  sudo sh -c 'echo $(which zsh) >> /etc/shells'
+fi
+
+# Set zsh as the default shell
 chsh -s $(which zsh)
+
+echo "zsh has been set as the default shell. Please log out and log back in for changes to take effect."
