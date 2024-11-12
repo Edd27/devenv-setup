@@ -19,8 +19,8 @@ sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting 
 echo "✔️ ZSH plugins updated successfully."
 echo
 
-# Source .zshrc to apply changes immediately
-zsh -c "source ~/.zshrc"
+# Restart shell to apply pyenv changes
+exec "$SHELL"
 
 # Install pyenv
 curl https://pyenv.run | bash
@@ -30,8 +30,8 @@ echo -e '\n# pyenv\nexport PYENV_ROOT="$HOME/.pyenv"\n[[ -d $PYENV_ROOT/bin ]] &
 echo "✔️ pyenv configured successfully."
 echo
 
-# Source .zshrc to apply pyenv changes
-zsh -c "source ~/.zshrc"
+# Restart shell to apply pyenv changes
+exec "$SHELL"
 
 # Install Python versions using pyenv
 pyenv install 2
@@ -46,8 +46,8 @@ curl -fsSL https://get.pnpm.io/install.sh | sh -
 # Configure pnpm in .zshrc
 echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc
 
-# Source .zshrc to apply pnpm changes
-zsh -c "source ~/.zshrc"
+# Restart shell to apply pyenv changes
+exec "$SHELL"
 
 # Set Node.js version with pnpm
 pnpm -g env use 18
