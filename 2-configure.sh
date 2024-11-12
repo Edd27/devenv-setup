@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 # Create work directories if they do not exist
 mkdir -p ~/dev/magnotechnology
