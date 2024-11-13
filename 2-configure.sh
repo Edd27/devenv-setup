@@ -137,6 +137,10 @@ else
     echo "Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
 fi
 
-# Final shell restart to apply all changes
+# Move to ~
+cd ~
+
 echo "🎉 Environment setup completed!"
+
+# Final shell restart to apply all changes
 exec "$SHELL"
