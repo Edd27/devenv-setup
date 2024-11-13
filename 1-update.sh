@@ -15,5 +15,3 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 if ! grep -Fxq "$(which zsh)" /etc/shells; then
   sudo sh -c 'echo $(which zsh) >> /etc/shells'
 fi
-
-zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/wsl2-devenv-setup/main/2-configure.sh)
