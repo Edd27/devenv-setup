@@ -23,7 +23,7 @@ echo "✔️ pnpm installed successfully."
 echo
 
 # Install Rust (automating '1' input to confirm default installation)
-echo "1" | curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 echo "✔️ Rust installed successfully."
 echo
 
@@ -111,6 +111,9 @@ pyenv global 3
 echo "✔️ Python versions installed successfully."
 echo
 
+# Install LTS Node version globally
+pnpm env use --global lts
+
 # Install corepack for pnpm
 pnpm add -g corepack
 echo "✔️ corepack installed successfully."
@@ -135,5 +138,5 @@ else
 fi
 
 # Final shell restart to apply all changes
-exec "$SHELL"
 echo "🎉 Environment setup completed!"
+exec "$SHELL"
