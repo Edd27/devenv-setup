@@ -43,9 +43,6 @@ echo
 # Install pnpm
 curl -fsSL https://get.pnpm.io/install.sh | sh -
 
-# Configure pnpm in .zshrc
-echo -e '\n# pnpm\nexport PNPM_HOME="$HOME/.local/share/pnpm"\ncase ":$PATH:" in\n  *":$PNPM_HOME:"*) ;;\n  *) export PATH="$PNM_HOME:$PATH" ;;\nesac\n# pnpm end\n' >> ~/.zshrc
-
 # Restart shell to apply pyenv changes
 source ~/.zshrc
 
@@ -56,6 +53,12 @@ pnpm -g env use 18
 pnpm add -g corepack
 echo "✔️ pnpm installed successfully."
 echo
+
+# Disable corepack auto pin
+echo -e '\n# corepack\nexport COREPACK_ENABLE_AUTO_PIN=0\n# corepack end\n'
+
+# Restart shell to apply pyenv changes
+source ~/.zshrc
 
 # Create global .gitignore
 touch ~/.gitignore
