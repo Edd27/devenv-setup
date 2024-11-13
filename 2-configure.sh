@@ -55,7 +55,7 @@ echo "✔️ pnpm installed successfully."
 echo
 
 # Disable corepack auto pin
-echo -e '\n# corepack\nexport COREPACK_ENABLE_AUTO_PIN=0\n# corepack end\n'
+echo -e '\n# corepack\nexport COREPACK_ENABLE_AUTO_PIN=0\n# corepack end\n' >> ~/.zshrc
 
 # Restart shell to apply pyenv changes
 source ~/.zshrc
