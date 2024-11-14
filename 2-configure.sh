@@ -97,6 +97,8 @@ alias dev="cd ~/dev && erd"
 alias gpm="gp origin main"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
+alias l="erd"
+alias ls="erd"
 EOL
 echo "✔️ Configuration added to .zshrc."
 echo
