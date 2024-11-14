@@ -74,19 +74,19 @@ echo
 # Configure all tools in .zshrc at once
 cat <<EOL >> ~/.zshrc
 
-# Plugins
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
-
 # pyenv
 export PYENV_ROOT="\$HOME/.pyenv"
 [[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
 eval "\$(pyenv init -)"
+# pyenv end
 
 # corepack
 export COREPACK_ENABLE_AUTO_PIN=0
+# corepack end
 
-# Rust
+# rust
 source "\$HOME/.cargo/env"
+# rust end
 
 # Custom aliases
 alias zshconfig="code ~/.zshrc"
@@ -100,6 +100,9 @@ alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset
 EOL
 echo "✔️ Configuration added to .zshrc."
 echo
+
+# Update plugins in .zshrc
+sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
 
 # Reload .zshrc to apply changes
 source ~/.zshrc
