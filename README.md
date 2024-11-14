@@ -71,7 +71,7 @@ This section lists all the prerequisites that you need to install before you can
    ```
 2. Then run the following command
    ```sh
-   zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/wsl-devenv-setup/main/2-configure.sh)
+   zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/wsl2-devenv-setup/main/2-configure.sh)
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
