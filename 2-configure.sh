@@ -12,11 +12,6 @@ echo
 # Install pyenv
 curl https://pyenv.run | bash
 
-# Install pnpm
-curl -fsSL https://get.pnpm.io/install.sh | sh
-echo "✔️ pnpm installed successfully."
-echo
-
 # Install Rust (automating '1' input to confirm default installation)
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 echo "✔️ Rust installed successfully."
@@ -59,6 +54,8 @@ node_modules
 dist
 build
 .npmrc
+.nvmrc
+.node-version
 .eslint*
 *-lock.json
 *.gyp
@@ -87,20 +84,6 @@ echo
 # Configure all tools in .zshrc at once
 cat <<EOL >> ~/.zshrc
 
-# pyenv
-export PYENV_ROOT="\$HOME/.pyenv"
-[[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
-eval "\$(pyenv init -)"
-# pyenv end
-
-# corepack
-export COREPACK_ENABLE_AUTO_PIN=0
-# corepack end
-
-# rust
-source "\$HOME/.cargo/env"
-# rust end
-
 # Custom aliases
 alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
@@ -112,12 +95,30 @@ alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset 
 alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
 alias l="erd"
 alias ls="erd"
+
+# pyenv
+export PYENV_ROOT="\$HOME/.pyenv"
+[[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
+eval "\$(pyenv init -)"
+# pyenv end
+
+# rust
+source "\$HOME/.cargo/env"
+# rust end
 EOL
 echo "✔️ Configuration added to .zshrc."
 echo
 
+# Install fnm
+curl -fsSL https://get.pnpm.io/install.sh | sh
+echo "✔️ fnm installed successfully."
+echo
+
 # Update plugins in .zshrc
 sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
+
+# Update flags to fnm env in .zshrc
+sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|g' ~/.zshrc
 
 # Reload .zshrc to apply changes
 source ~/.zshrc
@@ -135,12 +136,11 @@ python -m pip install setuptools
 echo "✔️ pip upgraded and setuptools installed successfully."
 echo
 
-# Install LTS Node version globally
-pnpm env use --global lts
-
-# Install corepack for pnpm
-pnpm add -g corepack
-echo "✔️ corepack installed successfully."
+# Install Node.js
+fnm install --lts
+fnm default $(fnm current)
+node -v
+echo "✔️ Node.js installed successfully."
 echo
 
 # Install erdtree using Cargo
