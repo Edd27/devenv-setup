@@ -87,7 +87,6 @@ cat <<EOL >> ~/.zshrc
 # Custom aliases
 alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
-alias pn="pnpm"
 alias home="cd ~ && erd"
 alias dev="cd ~/dev && erd"
 alias gpm="gp origin main"
@@ -110,7 +109,7 @@ echo "✔️ Configuration added to .zshrc."
 echo
 
 # Install fnm
-curl -fsSL https://get.pnpm.io/install.sh | sh
+curl -fsSL https://fnm.vercel.app/install | bash
 echo "✔️ fnm installed successfully."
 echo
 
