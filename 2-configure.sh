@@ -124,8 +124,7 @@ source ~/.zshrc
 
 # Install Python versions using pyenv
 pyenv install 2
-pyenv install 3
-pyenv global 3
+pyenv global 2
 echo "✔️ Python versions installed successfully."
 echo
 
