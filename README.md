@@ -3,88 +3,90 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/Edd27/linux-devenv-setup">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">DEV ENV AUTOMATE</h3>
 
   <p align="center">
-    Configuration for my personal development environment 
+    Scripts de configuracion automatizada para mi entorno de desarrollo como Ingeniero de Software 
   </p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
 <details>
-  <summary>Table of Contents</summary>
+  <summary>Tabla de contenido</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#about-the-project">Acerca del proyecto</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#built-with">Desarrollado con</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#getting-started">Iniciando</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
+        <li><a href="#prerequisites">Prerequisitos</a></li>
+        <li><a href="#installation">Instalacion</a></li>
       </ul>
     </li>
-    <li><a href="#contact">Contact</a></li>
+    <li><a href="#contact">Contacto</a></li>
   </ol>
 </details>
 
 <!-- ABOUT THE PROJECT -->
 
-## About The Project
+## Acerca del proyecto
 
 Aquí existen los scripts para automatizar el proceso de configuración de mi entorno de desarrollo para Windows con WSL2.
 
-### Built With
+### Desarrollado con
 
 [![Bash](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white)][Bash-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
 
 <!-- GETTING STARTED -->
 
-## Getting Started
+## Comenzando
 
-This is how to get the software up and running locally.
+Aqui esta todo lo necesario para iniciar con la ejecucion de los scripts
 
-### Prerequisites
+### Prerequisitos
 
-This section lists all the prerequisites that you need to install before you can run the scripts.
+En esta seccion se listan los prerequisitos para poder ejecutar los scripts de configuracion
 
-- WSL2
-  ```sh
-  wsl --install -d Debian
-  ```
+- Alguno de estos sistemas operativos:
+  - Windows con WSL2
+    ```sh
+    wsl --install -d Debian
+    ```
+  - Linux (Ubuntu o Debian)
 
-### Installation
+### Instalacion
 
-1. Open your terminal with WSL2 and run the following command
+1. Abre la terminal y ejecuta el siguiente comando
    ```sh
    sudo apt update; sudo apt -y upgrade; sudo apt install -y curl wget; \
    bash <(curl -s https://raw.githubusercontent.com/Edd27/wsl2-devenv-setup/main/1-update.sh)
    ```
-2. Then run the following command
+2. Despues ejecuta el siguiente comando
    ```sh
    zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/wsl2-devenv-setup/main/2-configure.sh)
    ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
 
 <!-- CONTACT -->
 
-## Contact
+## Contacto
 
 Edgar Benavides - [@EddDevJs](https://x.com/EddDevJs) - contacto@edgarbenavides.dev
 
-Project Link: [https://github.com/Edd27/wsl2-devenv-setup](https://github.com/Edd27/wsl2-devenv-setup)
+Enlace del proyecto: [https://github.com/Edd27/wsl2-devenv-setup](https://github.com/Edd27/wsl2-devenv-setup)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
