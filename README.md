@@ -69,11 +69,11 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
 1. Abre la terminal y ejecuta el siguiente comando
    ```sh
    sudo apt update; sudo apt -y upgrade; sudo apt install -y curl wget; \
-   bash <(curl -s https://raw.githubusercontent.com/Edd27/wsl2-devenv-setup/main/1-update.sh)
+   bash <(curl -s https://raw.githubusercontent.com/Edd27/linux-devenv-setup/main/1-update.sh)
    ```
 2. Despues ejecuta el siguiente comando
    ```sh
-   zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/wsl2-devenv-setup/main/2-configure.sh)
+   zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/linux-devenv-setup/main/2-configure.sh)
    ```
 
 <p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
