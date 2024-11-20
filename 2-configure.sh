@@ -34,7 +34,7 @@ git config --global core.autocrlf input
 git config --global init.defaultbranch main
 git config --global core.fileMode false
 git config --global core.excludesfile ~/.gitignore
-git config --global --add safe.directory ~/dev
+git config --global --add safe.directory '*'
 echo "✔️ Git configurations set successfully."
 echo
 
