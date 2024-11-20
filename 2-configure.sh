@@ -56,6 +56,7 @@ build
 .npmrc
 .nvmrc
 .node-version
+.python-version
 .eslint*
 *-lock.json
 *.gyp
