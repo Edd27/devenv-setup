@@ -64,6 +64,15 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
     ```
   - Linux (Ubuntu o Debian)
 
+- ZSH como shell por defecto
+  1. Instalar ZSH
+    ```sh
+    sudo apt install zsh; \
+      zsh --version; \
+      chsh -s $(which zsh)
+    ```
+  2. Recargar la terminal.
+
 ### Instalacion
 
 1. Abre la terminal y ejecuta el siguiente comando
