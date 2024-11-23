@@ -6,7 +6,7 @@ echo "Detecting OS..."
 
 sleep 2
 
-if [[ "$os_type" != "Linux" ]] || [[ "$os_type" != "Darwin" ]]; then
+if [[ "$os_type" != "Linux" ]] && [[ "$os_type" != "Darwin" ]]; then
     echo "Unsupported OS: $os_type"
     exit 1
 fi
@@ -19,7 +19,7 @@ fi
 if [[ "$os_type" == "Linux" ]]; then
   source /etc/os-release
 
-  if [[ "$NAME" != "Ubuntu" ]] || [[ "$NAME" != "Debian GNU/Linux" ]]; then
+  if [[ "$NAME" != "Ubuntu" ]] && [[ "$NAME" != "Debian GNU/Linux" ]]; then
     echo "Unsupported distribution: $NAME"
     exit 1
   fi
