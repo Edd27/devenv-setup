@@ -3,7 +3,7 @@
 os_type=$(uname)
 
 if [[ "$os_type" != "Linux" ]] || [[ "$os_type" != "Darwin" ]]; then
-    echo "Unsupported OS"
+    echo "Unsupported OS: $os_type"
     exit 1
 fi
 
