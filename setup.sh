@@ -7,14 +7,14 @@ echo "☕️ Detecting OS..."
 sleep 2
 
 if [[ "$os_type" != "Linux" ]] && [[ "$os_type" != "Darwin" ]]; then
-    echo "Unsupported OS: $os_type"
+    echo "❌ Unsupported OS: $os_type"
     exit 1
 fi
 
-echo "☕️ Verifying if ZSH is default sheell..."
+echo "☕️ Verifying if ZSH is default shell..."
 
 if [[ "$SHELL" != *"zsh" ]]; then
-    echo "❗️ zsh is not the default shell. Exiting..."
+    echo "❌ zsh is not the default shell. Exiting..."
     exit 1
 else
     echo "✅ ZSH is default shell"
@@ -24,7 +24,7 @@ if [[ "$os_type" == "Linux" ]]; then
   source /etc/os-release
 
   if [[ "$NAME" != "Ubuntu" ]] && [[ "$NAME" != "Debian GNU/Linux" ]]; then
-    echo "❗️ Unsupported distribution: $NAME"
+    echo "❌ Unsupported distribution: $NAME"
     exit 1
   fi
 
@@ -32,7 +32,7 @@ if [[ "$os_type" == "Linux" ]]; then
 
   echo "☕️ Updating..."
 
-  sudo apt update && sudo apt upgrade -y
+  sudo apt update && sudo apt upgrade -y || { echo "❌ Update failed!"; exit 1; }
 
   echo "✅ Update completed"
 
@@ -47,24 +47,23 @@ if [[ "$os_type" == "Linux" ]]; then
 elif [[ "$os_type" == "Darwin" ]]; then
   echo "OS detected: 🍎 macOS"
 
-  echo "☕️ Installing Homebrew..."
+  if ! command -v brew &>/dev/null; then
+    echo "☕️ Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo "✅ Homebrew installed"
+    echo "☕️ Reloading ZSH shell..."
+    source ~/.zshrc
+    echo "✅ ZSH shell reloaded"
+  else
+    echo "✅ Homebrew is already installed."
+  fi
 
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-  echo "☕️ Reloading ZSH shell..."
-
-  source ~/.zshrc
-
-  echo "✅ ZSH shell reloaded"
-
-  echo "✅ Homebrew installed"
-
-  echo "☕️ Updating..."
+  echo "☕️ Updating Homebrew..."
 
   brew update
   brew upgrade
 
-  echo "✅ Homebrew installed"
+  echo "✅ Homebrew updated"
 
   echo "☕️ Installing homebrew console tools..."
 
@@ -142,13 +141,12 @@ echo "✅ GitHub SSH key generated"
 if [[ "$os_type" == "Linux" ]]; then
   xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub || echo "xclip not installed, unable to copy SSH key."
 else
-  pbcopy < ~/.ssh/GitHub_Edd27.pub
+  pbcopy < ~/.ssh/$ssh_key_name.pub
 fi
 
-read -q "ssh_added?Have you added the SSH key to your GitHub account? (yes/no): "
-echo
+read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
 
-if [[ "$ssh_added" == "y" ]]; then
+if [[ "$ssh_added" == "yes" ]]; then
     ssh -T git@github.com
     echo "✅ GitHub SSH added"
 else
