@@ -7,6 +7,11 @@ if [[ "$os_type" != "Linux" ]] || [[ "$os_type" != "Darwin" ]]; then
     exit 1
 fi
 
+if [[ "$SHELL" != *"zsh" ]]; then
+    echo "zsh is not the default shell. Exiting..."
+    exit 1
+fi
+
 if [[ "$os_type" == "Linux" ]]; then
   source /etc/os-release
 
@@ -25,7 +30,7 @@ if [[ "$os_type" == "Linux" ]]; then
 
   echo "Installing tools..."
 
-  sudo apt install -y wget zsh git unzip bat neofetch xclip build-essential libssl-dev zlib1g-dev \
+  sudo apt install -y wget git unzip bat neofetch xclip build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
     libffi-dev liblzma-dev
 
@@ -38,10 +43,40 @@ elif [[ "$os_type" == "Darwin" ]]; then
 
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+  echo "Reloading ZSH shell..."
+
+  source ~/.zshrc
+
+  echo "✅ ZSH shell reloaded"
+
   echo "✅ Homebrew installed"
+
+  echo "Updating..."
+
+  brew update
+  brew upgrade
+
+  echo "✅ Homebrew installed"
+
+  echo "Installing homebrew console tools..."
+
+  brew install bat scc ollama openssl readline sqlite3 xz zlib tcl-tk
+
+  echo "✅ Homebrew console tools installed"
+
+  echo "Installing Homebrew Casks..."
+
+  brew install --cask appcleaner bitwarden brave-browser dbeaver-community discord docker figma macs-fan-control microsoft-auto-update microsoft-teams mongodb-compass notion postman rectangle runjs spotify visual-studio-code whatsapp
+
+  echo "✅ Homebrew casks tools installed"
+
 fi
 
-# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+echo "Instlling Oh my zsh..."
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+echo "✅ Oh my zsh installed"
 
 echo "Cloning ZSH plugins..."
 
@@ -55,7 +90,11 @@ echo "✅ ZSH plugins cloned"
 
 echo "Installing Pyenv..."
 
-curl https://pyenv.run | bash
+if [[ "$os_type" == "Linux" ]]; then
+  curl https://pyenv.run | bash
+else
+  brew install pyenv 
+fi
 
 echo "✅ Pyenv installed"
 
@@ -108,7 +147,11 @@ fi
 
 echo "✅ GitHub SSH key generated"
 
-xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub || echo "xclip not installed, unable to copy SSH key."
+if [[ "$os_type" == "Linux" ]]; then
+  xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub || echo "xclip not installed, unable to copy SSH key."
+else
+  pbcopy < ~/.ssh/GitHub_Edd27.pub
+fi
 
 read -q "ssh_added?Have you added the SSH key to your GitHub account? (yes/no): "
 echo
