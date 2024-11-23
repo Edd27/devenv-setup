@@ -2,7 +2,7 @@
 
 os_type=$(uname)
 
-echo "Detecting OS..."
+echo "☕️ Detecting OS..."
 
 sleep 2
 
@@ -11,28 +11,32 @@ if [[ "$os_type" != "Linux" ]] && [[ "$os_type" != "Darwin" ]]; then
     exit 1
 fi
 
+echo "☕️ Verifying if ZSH is default sheell..."
+
 if [[ "$SHELL" != *"zsh" ]]; then
-    echo "zsh is not the default shell. Exiting..."
+    echo "❗️ zsh is not the default shell. Exiting..."
     exit 1
+else
+    echo "✅ ZSH is default shell"
 fi
 
 if [[ "$os_type" == "Linux" ]]; then
   source /etc/os-release
 
   if [[ "$NAME" != "Ubuntu" ]] && [[ "$NAME" != "Debian GNU/Linux" ]]; then
-    echo "Unsupported distribution: $NAME"
+    echo "❗️ Unsupported distribution: $NAME"
     exit 1
   fi
 
   echo "OS detected: 🐧 $NAME"
 
-  echo "Updating..."
+  echo "☕️ Updating..."
 
   sudo apt update && sudo apt upgrade -y
 
   echo "✅ Update completed"
 
-  echo "Installing tools..."
+  echo "☕️ Installing tools..."
 
   sudo apt install -y wget git unzip bat neofetch xclip build-essential libssl-dev zlib1g-dev \
     libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
@@ -43,11 +47,11 @@ if [[ "$os_type" == "Linux" ]]; then
 elif [[ "$os_type" == "Darwin" ]]; then
   echo "OS detected: 🍎 macOS"
 
-  echo "Installing Homebrew..."
+  echo "☕️ Installing Homebrew..."
 
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-  echo "Reloading ZSH shell..."
+  echo "☕️ Reloading ZSH shell..."
 
   source ~/.zshrc
 
@@ -55,20 +59,20 @@ elif [[ "$os_type" == "Darwin" ]]; then
 
   echo "✅ Homebrew installed"
 
-  echo "Updating..."
+  echo "☕️ Updating..."
 
   brew update
   brew upgrade
 
   echo "✅ Homebrew installed"
 
-  echo "Installing homebrew console tools..."
+  echo "☕️ Installing homebrew console tools..."
 
-  brew install bat scc ollama openssl readline sqlite3 xz zlib tcl-tk
+  brew install bat scc openssl readline sqlite3 xz zlib tcl-tk
 
   echo "✅ Homebrew console tools installed"
 
-  echo "Installing Homebrew Casks..."
+  echo "☕️ Installing Homebrew Casks..."
 
   brew install --cask appcleaner bitwarden brave-browser dbeaver-community discord docker figma macs-fan-control microsoft-auto-update microsoft-teams mongodb-compass notion postman rectangle runjs spotify visual-studio-code whatsapp
 
@@ -76,23 +80,7 @@ elif [[ "$os_type" == "Darwin" ]]; then
 
 fi
 
-echo "Instlling Oh my zsh..."
-
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-echo "✅ Oh my zsh installed"
-
-echo "Cloning ZSH plugins..."
-
-ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
-git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions" > /dev/null 2>&1
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" > /dev/null 2>&1
-git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$ZSH_CUSTOM/plugins/you-should-use" > /dev/null 2>&1
-git clone https://github.com/fdellwing/zsh-bat.git "$ZSH_CUSTOM/plugins/zsh-bat" > /dev/null 2>&1
-
-echo "✅ ZSH plugins cloned"
-
-echo "Installing Pyenv..."
+echo "☕️ Installing Pyenv..."
 
 if [[ "$os_type" == "Linux" ]]; then
   curl https://pyenv.run | bash
@@ -102,13 +90,13 @@ fi
 
 echo "✅ Pyenv installed"
 
-echo "Installing rust..."
+echo "☕️ Installing rust..."
 
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 echo "✅ Rust installed"
 
-echo "Creating ssh directory..."
+echo "☕️ Creating ssh directory..."
 
 mkdir -p ~/.ssh
 
@@ -116,7 +104,7 @@ echo "✅ SSH directory created"
 
 cd ~/.ssh || exit
 
-echo "Generating ssh key for GitHub..."
+echo "☕️ Generating ssh key for GitHub..."
 
 read -p "SSH Key name: " ssh_key_name
 
@@ -167,7 +155,7 @@ else
     echo "⏩ Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
 fi
 
-echo "Configuring global git..."
+echo "☕️ Configuring global git..."
 
 read -p "Complete name: " git_complete_name
 git config --global user.name "$git_complete_name"
@@ -200,13 +188,13 @@ echo "✅ Global git configured"
 
 touch ~/.hushlogin
 
-echo "Creating work directories..."
+echo "☕️ Creating work directories..."
 
 mkdir -p ~/dev/magnotechnology
 
 echo "✅ Work directories created"
 
-echo "Adding erdtree configuration..."
+echo "☕️ Adding erdtree configuration..."
 
 cat <<EOL > ~/.erdtreerc
 --level 2
@@ -217,7 +205,7 @@ EOL
 
 echo "✅ Erdtree configuration added"
 
-echo "Editing ZSH configuration file..."
+echo "☕️ Editing ZSH configuration file..."
 
 cat <<EOL >> ~/.zshrc
 
@@ -249,19 +237,19 @@ sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=re
 
 echo "✅ ZSH configuration file edited"
 
-echo "Installing fnm..."
+echo "☕️ Installing fnm..."
 
 curl -fsSL https://fnm.vercel.app/install | bash
 
 echo "✅ Fnm installed"
 
-echo "Reloading ZSH shell..."
+echo "☕️ Reloading ZSH shell..."
 
 source ~/.zshrc
 
 echo "✅ ZSH shell reloaded"
 
-echo "Installing python..."
+echo "☕️ Installing python..."
 
 pyenv install 2
 pyenv install 3
@@ -269,14 +257,14 @@ pyenv global 3
 
 echo "✅ Python versions installed"
 
-echo "Installing setuptools..."
+echo "☕️ Installing setuptools..."
 
 pip install --upgrade pip
 python -m pip install setuptools
 
 echo "✅ Setuptools installed"
 
-echo "Installing Node.js LTS"
+echo "☕️ Installing Node.js LTS"
 
 fnm install --lts
 fnm default $(fnm current)
@@ -284,13 +272,31 @@ node -v
 
 echo "✅ Node.js installed"
 
-echo "Installing Erdtree..."
+echo "☕️ Installing Erdtree..."
 
 cargo install erdtree
 
 echo "✅ Erdtree installed"
 
 cd ~
+
+echo "☕️ Instlling Oh my zsh..."
+
+git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+
+echo "✅ Oh my zsh installed"
+
+echo "☕️ Cloning ZSH plugins..."
+
+ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
+git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions" > /dev/null 2>&1
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" > /dev/null 2>&1
+git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$ZSH_CUSTOM/plugins/you-should-use" > /dev/null 2>&1
+git clone https://github.com/fdellwing/zsh-bat.git "$ZSH_CUSTOM/plugins/zsh-bat" > /dev/null 2>&1
+
+echo "✅ ZSH plugins cloned"
 
 echo "🎉 Environment setup completed!"
 
