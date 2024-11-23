@@ -3,7 +3,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Edd27/linux-devenv-setup">
+  <a href="https://github.com/Edd27/devenv-setup">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -67,14 +67,15 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
 ### Instalacion
 
 1. Abre la terminal y ejecuta el siguiente comando
-   ```sh
-   sudo apt update; sudo apt -y upgrade; sudo apt install -y curl wget; \
-   bash <(curl -s https://raw.githubusercontent.com/Edd27/linux-devenv-setup/main/1-update.sh)
-   ```
-2. Despues ejecuta el siguiente comando
-   ```sh
-   zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/linux-devenv-setup/main/2-configure.sh)
-   ```
+  - Linux
+    ```sh
+    sudo apt update; sudo apt -y upgrade; sudo apt install -y curl; \
+    bash -i <(curl -s https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
+    ```
+  - macOS
+    ```sh
+    bash -i <(curl -s https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
+    ```
 
 <p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
 
@@ -84,7 +85,7 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
 
 Edgar Benavides - [@EddDevJs](https://x.com/EddDevJs) - contacto@edgarbenavides.dev
 
-Enlace del proyecto: [https://github.com/Edd27/wsl2-devenv-setup](https://github.com/Edd27/wsl2-devenv-setup)
+Enlace del proyecto: [https://github.com/Edd27/devenv-setup](https://github.com/Edd27/devenv-setup)
 
 <p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
 
