@@ -2,6 +2,10 @@
 
 os_type=$(uname)
 
+echo "Detecting OS..."
+
+sleep 2
+
 if [[ "$os_type" != "Linux" ]] || [[ "$os_type" != "Darwin" ]]; then
     echo "Unsupported OS: $os_type"
     exit 1
