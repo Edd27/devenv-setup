@@ -21,131 +21,114 @@ else
 fi
 
 if [[ "$os_type" == "Linux" ]]; then
-  source /etc/os-release
+    source /etc/os-release
 
-  if [[ "$NAME" != "Ubuntu" ]] && [[ "$NAME" != "Debian GNU/Linux" ]]; then
-    echo "❌ Unsupported distribution: $NAME"
-    exit 1
-  fi
+    if [[ "$NAME" != "Ubuntu" ]] && [[ "$NAME" != "Debian GNU/Linux" ]]; then
+        echo "❌ Unsupported distribution: $NAME"
+        exit 1
+    fi
 
-  echo "OS detected: 🐧 $NAME"
+    echo "OS detected: 🐧 $NAME"
+    echo "☕️ Updating..."
 
-  echo "☕️ Updating..."
+    sudo apt update && sudo apt upgrade -y || { echo "❌ Update failed!"; exit 1; }
+    echo "✅ Update completed"
 
-  sudo apt update && sudo apt upgrade -y || { echo "❌ Update failed!"; exit 1; }
-
-  echo "✅ Update completed"
-
-  echo "☕️ Installing tools..."
-
-  sudo apt install -y wget git unzip bat neofetch xclip build-essential libssl-dev zlib1g-dev \
-    libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
-    libffi-dev liblzma-dev
-
-  echo "✅ Tools installed"
+    echo "☕️ Installing tools..."
+    sudo apt install -y wget git unzip bat neofetch xclip build-essential libssl-dev zlib1g-dev \
+        libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
+        libffi-dev liblzma-dev
+    echo "✅ Tools installed"
 
 elif [[ "$os_type" == "Darwin" ]]; then
-  echo "OS detected: 🍎 macOS"
+    echo "OS detected: 🍎 macOS"
 
-  if ! command -v brew &>/dev/null; then
-    echo "☕️ Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    echo "✅ Homebrew installed"
-    echo "☕️ Reloading ZSH shell..."
-    source ~/.zshrc
-    echo "✅ ZSH shell reloaded"
-  else
-    echo "✅ Homebrew is already installed."
-  fi
+    if ! command -v brew &>/dev/null; then
+        echo "☕️ Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo "✅ Homebrew installed"
+        echo "☕️ Reloading ZSH shell..."
+        source ~/.zshrc
+        echo "✅ ZSH shell reloaded"
+    else
+        echo "✅ Homebrew is already installed."
+    fi
 
-  echo "☕️ Updating Homebrew..."
+    echo "☕️ Updating Homebrew..."
+    brew update
+    brew upgrade
+    echo "✅ Homebrew updated"
 
-  brew update
-  brew upgrade
+    echo "☕️ Installing Homebrew console tools..."
+    brew install bat scc openssl readline sqlite3 xz zlib tcl-tk
+    echo "✅ Homebrew console tools installed"
 
-  echo "✅ Homebrew updated"
-
-  echo "☕️ Installing homebrew console tools..."
-
-  brew install bat scc openssl readline sqlite3 xz zlib tcl-tk
-
-  echo "✅ Homebrew console tools installed"
-
-  echo "☕️ Installing Homebrew Casks..."
-
-  brew install --cask appcleaner bitwarden brave-browser dbeaver-community discord docker figma macs-fan-control microsoft-auto-update microsoft-teams mongodb-compass notion postman rectangle runjs spotify visual-studio-code whatsapp
-
-  echo "✅ Homebrew casks tools installed"
-
+    echo "☕️ Installing Homebrew Casks..."
+    brew install --cask appcleaner bitwarden brave-browser dbeaver-community discord docker figma macs-fan-control \
+        microsoft-auto-update microsoft-teams mongodb-compass notion postman rectangle runjs spotify visual-studio-code whatsapp
+    echo "✅ Homebrew casks tools installed"
 fi
 
 echo "☕️ Installing Pyenv..."
-
 if [[ "$os_type" == "Linux" ]]; then
-  curl https://pyenv.run | bash
+    curl https://pyenv.run | bash
 else
-  brew install pyenv 
+    brew install pyenv
 fi
-
 echo "✅ Pyenv installed"
 
 echo "☕️ Installing rust..."
-
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-
 echo "✅ Rust installed"
 
 echo "☕️ Creating ssh directory..."
-
 mkdir -p ~/.ssh
-
 echo "✅ SSH directory created"
 
 cd ~/.ssh || exit
 
 echo "☕️ Generating ssh key for GitHub..."
-
 read -p "SSH Key name: " ssh_key_name
-
 read -p "GitHub email: " github_email
 
 ssh-keygen -t ed25519 -b 4096 -C "$github_email" -f "$ssh_key_name" -N ""
-
 eval "$(ssh-agent -s)"
-
 ssh-add "$ssh_key_name"
 
-if [[ "$os_type" == "Linux" ]]; then
-  cat <<EOL > ~/.ssh/config
-  # Personal Github
-  Host github.com
-    HostName github.com
-    PreferredAuthentications publickey
-    AddKeysToAgent yes
-    IdentityFile ~/.ssh/$ssh_key_name
-  EOL
-elif [[ "$os_type" == "Darwin" ]]; then
-  cat <<EOL > ~/.ssh/config
-  # Personal Github
-  Host github.com
-    HostName github.com
-    PreferredAuthentications publickey
-    AddKeysToAgent yes
-    UseKeychain yes
-    IdentityFile ~/.ssh/$ssh_key_name
-  EOL
+if [[ -z "$ssh_key_name" ]]; then
+    echo "❌ SSH key name is not set."
+    exit 1
 fi
 
+if [[ "$os_type" == "Linux" ]]; then
+    cat <<EOL > ~/.ssh/config
+# Personal Github
+Host github.com
+  HostName github.com
+  PreferredAuthentications publickey
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/$ssh_key_name
+EOL
+elif [[ "$os_type" == "Darwin" ]]; then
+    cat <<EOL > ~/.ssh/config
+# Personal Github
+Host github.com
+  HostName github.com
+  PreferredAuthentications publickey
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/$ssh_key_name
+EOL
+fi
 echo "✅ GitHub SSH key generated"
 
 if [[ "$os_type" == "Linux" ]]; then
-  xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub || echo "xclip not installed, unable to copy SSH key."
+    xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub || echo "xclip not installed, unable to copy SSH key."
 else
-  pbcopy < ~/.ssh/$ssh_key_name.pub
+    pbcopy < ~/.ssh/$ssh_key_name.pub
 fi
 
 read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
-
 if [[ "$ssh_added" == "yes" ]]; then
     ssh -T git@github.com
     echo "✅ GitHub SSH added"
@@ -154,7 +137,6 @@ else
 fi
 
 echo "☕️ Configuring global git..."
-
 read -p "Complete name: " git_complete_name
 git config --global user.name "$git_complete_name"
 git config --global user.email "$github_email"
@@ -181,30 +163,24 @@ build
 *.gyp
 .vscode
 EOL
-
 echo "✅ Global git configured"
 
 touch ~/.hushlogin
 
 echo "☕️ Creating work directories..."
-
 mkdir -p ~/dev/magnotechnology
-
 echo "✅ Work directories created"
 
 echo "☕️ Adding erdtree configuration..."
-
 cat <<EOL > ~/.erdtreerc
 --level 2
 --icons
 --human
 -s size
 EOL
-
 echo "✅ Erdtree configuration added"
 
 echo "☕️ Editing ZSH configuration file..."
-
 cat <<EOL >> ~/.zshrc
 
 # Custom aliases
@@ -230,70 +206,50 @@ source "\$HOME/.cargo/env"
 EOL
 
 sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
-
 sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|g' ~/.zshrc
-
 echo "✅ ZSH configuration file edited"
 
 echo "☕️ Installing fnm..."
-
 curl -fsSL https://fnm.vercel.app/install | bash
-
 echo "✅ Fnm installed"
 
 echo "☕️ Reloading ZSH shell..."
-
 source ~/.zshrc
-
 echo "✅ ZSH shell reloaded"
 
 echo "☕️ Installing python..."
-
 pyenv install 2
 pyenv install 3
 pyenv global 3
-
 echo "✅ Python versions installed"
 
 echo "☕️ Installing setuptools..."
-
 pip install --upgrade pip
 python -m pip install setuptools
-
 echo "✅ Setuptools installed"
 
-echo "☕️ Installing Node.js LTS"
-
+echo "☕️ Installing Node.js LTS..."
 fnm install --lts
 fnm default $(fnm current)
 node -v
-
 echo "✅ Node.js installed"
 
 echo "☕️ Installing Erdtree..."
-
 cargo install erdtree
-
 echo "✅ Erdtree installed"
 
 cd ~
 
-echo "☕️ Instlling Oh my zsh..."
-
+echo "☕️ Installing Oh My Zsh..."
 git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
-
 cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-
-echo "✅ Oh my zsh installed"
+echo "✅ Oh My Zsh installed"
 
 echo "☕️ Cloning ZSH plugins..."
-
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
-git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions" > /dev/null 2>&1
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" > /dev/null 2>&1
-git clone https://github.com/MichaelAquilina/zsh-you-should-use.git "$ZSH_CUSTOM/plugins/you-should-use" > /dev/null 2>&1
-git clone https://github.com/fdellwing/zsh-bat.git "$ZSH_CUSTOM/plugins/zsh-bat" > /dev/null 2>&1
-
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
+git clone https://github.com/MichaelAquilina/zsh-you-should-use ${ZSH_CUSTOM}/plugins/you-should-use
 echo "✅ ZSH plugins cloned"
 
 echo "🎉 Environment setup completed!"
