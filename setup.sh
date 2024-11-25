@@ -180,6 +180,18 @@ cat <<EOL > ~/.erdtreerc
 EOL
 echo "✅ Erdtree configuration added"
 
+echo "☕️ Installing Oh My Zsh..."
+git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+echo "✅ Oh My Zsh installed"
+
+echo "☕️ Cloning ZSH plugins..."
+ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
+git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
+git clone https://github.com/MichaelAquilina/zsh-you-should-use ${ZSH_CUSTOM}/plugins/you-should-use
+echo "✅ ZSH plugins cloned"
+
 echo "☕️ Editing ZSH configuration file..."
 cat <<EOL >> ~/.zshrc
 
@@ -239,18 +251,6 @@ cargo install erdtree
 echo "✅ Erdtree installed"
 
 cd ~
-
-echo "☕️ Installing Oh My Zsh..."
-git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
-cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-echo "✅ Oh My Zsh installed"
-
-echo "☕️ Cloning ZSH plugins..."
-ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
-git clone https://github.com/MichaelAquilina/zsh-you-should-use ${ZSH_CUSTOM}/plugins/you-should-use
-echo "✅ ZSH plugins cloned"
 
 echo "🎉 Environment setup completed!"
 
