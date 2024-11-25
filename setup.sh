@@ -189,6 +189,10 @@ else
     echo "✅ Oh My Zsh installed."
 fi
 
+echo "☕️ Installing fnm..."
+curl -fsSL https://fnm.vercel.app/install | bash
+echo "✅ Fnm installed"
+
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
 
 clone_zsh_plugin() {
@@ -208,6 +212,7 @@ clone_zsh_plugin() {
 clone_zsh_plugin "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions.git"
 clone_zsh_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting.git"
 clone_zsh_plugin "you-should-use" "https://github.com/MichaelAquilina/zsh-you-should-use.git"
+clone_zsh_plugin "zsh-bat" "https://github.com/fdellwing/zsh-bat.git"
 
 echo "☕️ Editing ZSH configuration file..."
 cat <<EOL >> ~/.zshrc
@@ -243,10 +248,6 @@ else
 fi
 
 echo "✅ ZSH configuration file edited"
-
-echo "☕️ Installing fnm..."
-curl -fsSL https://fnm.vercel.app/install | bash
-echo "✅ Fnm installed"
 
 echo "☕️ Reloading ZSH shell..."
 source ~/.zshrc
