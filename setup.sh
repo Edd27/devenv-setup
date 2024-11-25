@@ -180,17 +180,34 @@ cat <<EOL > ~/.erdtreerc
 EOL
 echo "✅ Erdtree configuration added"
 
-echo "☕️ Installing Oh My Zsh..."
-git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
-cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-echo "✅ Oh My Zsh installed"
+if [[ -d "$HOME/.oh-my-zsh" ]]; then
+    echo "✅ Oh My Zsh is already installed."
+else
+    echo "☕️ Installing Oh My Zsh..."
+    git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+    cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+    echo "✅ Oh My Zsh installed."
+fi
 
-echo "☕️ Cloning ZSH plugins..."
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM}/plugins/zsh-syntax-highlighting
-git clone https://github.com/MichaelAquilina/zsh-you-should-use ${ZSH_CUSTOM}/plugins/you-should-use
-echo "✅ ZSH plugins cloned"
+
+clone_zsh_plugin() {
+    local plugin_name=$1
+    local plugin_repo=$2
+    local plugin_dir="${ZSH_CUSTOM}/plugins/${plugin_name}"
+
+    if [[ -d "$plugin_dir" ]]; then
+        echo "✅ ZSH plugin '${plugin_name}' is already installed."
+    else
+        echo "☕️ Cloning '${plugin_name}' plugin..."
+        git clone "$plugin_repo" "$plugin_dir"
+        echo "✅ '${plugin_name}' plugin installed."
+    fi
+}
+
+clone_zsh_plugin "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions.git"
+clone_zsh_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syntax-highlighting.git"
+clone_zsh_plugin "you-should-use" "https://github.com/MichaelAquilina/zsh-you-should-use.git"
 
 echo "☕️ Editing ZSH configuration file..."
 cat <<EOL >> ~/.zshrc
@@ -217,8 +234,14 @@ source "\$HOME/.cargo/env"
 # rust end
 EOL
 
-sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
-sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|g' ~/.zshrc
+if [[ "$os_type" == "Darwin" ]]; then
+    sed -i '' 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
+    sed -i '' 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|g' ~/.zshrc
+else
+    sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
+    sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|g' ~/.zshrc
+fi
+
 echo "✅ ZSH configuration file edited"
 
 echo "☕️ Installing fnm..."
