@@ -309,7 +309,6 @@ echo "✅ Setuptools installed"
 
 echo "☕️ Installing Node.js LTS..."
 fnm install --lts
-zsh -c "source <(fnm env --shell zsh)"
 LTS_VERSION=$(fnm list | grep -E '^\s*\d+\.\d+\.\d+\s*(default)?$' | tail -1 | awk '{print $1}')
 fnm default $LTS_VERSION
 node -v
