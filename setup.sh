@@ -238,15 +238,15 @@ alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset
 alias l="erd"
 alias ls="erd"
 
-# pyenv
+# Pyenv
 export PYENV_ROOT="\$HOME/.pyenv"
 [[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
 eval "\$(pyenv init -)"
 
-# rust
+# Rust
 source "\$HOME/.cargo/env"
 
-# fnm
+# Fnm
 eval "\`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`"
 
 EOL
@@ -276,6 +276,9 @@ alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset
 alias l="erd"
 alias ls="erd"
 
+# Rust
+source "\$HOME/.cargo/bin"
+
 EOL
 fi
 
@@ -298,7 +301,8 @@ echo "✅ Setuptools installed"
 
 echo "☕️ Installing Node.js LTS..."
 fnm install --lts
-fnm default $(fnm current)
+source "$(fnm env)"
+fnm default $(fnm list --lts | head -n 1)
 node -v
 echo "✅ Node.js installed"
 
@@ -317,13 +321,13 @@ echo "✅ Erdtree configuration added"
 
 ZSHRC_FILE=~/.zshrc
 if [[ "$os_type" == "Darwin" ]]; then
-    sed -i 's/^#\(export ZSH="\\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
-    sed -i 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
-    sed -i 's/^#\(source \\$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
-else
     sed -i '' 's/^#\(export ZSH="\\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's/^#\(source \\$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
+else
+    sed -i 's/^#\(export ZSH="\\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
+    sed -i 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
+    sed -i 's/^#\(source \\$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
 fi
 
 cd ~
