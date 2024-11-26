@@ -79,11 +79,11 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
   - Linux
     ```sh
     sudo apt update; sudo apt -y upgrade; sudo apt install -y curl; \
-    zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
+    curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh | zsh -i
     ```
   - macOS
     ```sh
-    zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
+    curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh | zsh -i
     ```
 
 <p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
