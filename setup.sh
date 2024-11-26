@@ -212,10 +212,12 @@ clone_zsh_plugin "you-should-use" "https://github.com/MichaelAquilina/zsh-you-sh
 clone_zsh_plugin "zsh-bat" "https://github.com/fdellwing/zsh-bat.git"
 
 echo "☕️ Editing ZSH configuration file..."
-cat <<EOL >> ~/.zshrc
+
+if [[ "$os_type" == "Linux" ]]; then
+    cat <<EOL >> ~/.zshrc
 
 # Oh My Zsh installation.
-#export ZSH="$HOME/.oh-my-zsh"
+#export ZSH="\$HOME/.oh-my-zsh"
 
 # Theme
 #ZSH_THEME="robbyrussell"
@@ -223,7 +225,7 @@ cat <<EOL >> ~/.zshrc
 # Plugins
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
 
-#source $ZSH/oh-my-zsh.sh
+#source "\$ZSH/oh-my-zsh.sh"
 
 # Custom aliases
 alias zshconfig="code ~/.zshrc"
@@ -237,16 +239,45 @@ alias l="erd"
 alias ls="erd"
 
 # pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+export PYENV_ROOT="\$HOME/.pyenv"
+[[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
+eval "\$(pyenv init -)"
 
 # rust
-source "$HOME/.cargo/env"
+source "\$HOME/.cargo/env"
 
 # fnm
-eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"
+eval "\`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`"
+
 EOL
+
+elif [[ "$os_type" == "Darwin" ]]; then
+    cat <<EOL >> ~/.zshrc
+
+# Oh My Zsh installation.
+#export ZSH="\$HOME/.oh-my-zsh"
+
+# Theme
+#ZSH_THEME="robbyrussell"
+
+# Plugins
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
+
+#source "\$ZSH/oh-my-zsh.sh"
+
+# Custom aliases
+alias zshconfig="code ~/.zshrc"
+alias ohmyzsh="code ~/.oh-my-zsh"
+alias home="cd ~ && erd"
+alias dev="cd ~/dev && erd"
+alias gpm="gp origin main"
+alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
+alias l="erd"
+alias ls="erd"
+
+EOL
+fi
 
 echo "✅ ZSH configuration file edited"
 
@@ -286,13 +317,13 @@ echo "✅ Erdtree configuration added"
 
 ZSHRC_FILE=~/.zshrc
 if [[ "$os_type" == "Darwin" ]]; then
-    sed -i '' 's/^#\(export ZSH="\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
-    sed -i '' 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
-    sed -i '' 's/^#\(source \$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
-else
-    sed -i 's/^#\(export ZSH="\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
+    sed -i 's/^#\(export ZSH="\\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
-    sed -i 's/^#\(source \$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
+    sed -i 's/^#\(source \\$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
+else
+    sed -i '' 's/^#\(export ZSH="\\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
+    sed -i '' 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
+    sed -i '' 's/^#\(source \\$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
 fi
 
 cd ~
