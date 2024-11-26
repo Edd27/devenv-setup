@@ -310,7 +310,8 @@ echo "✅ Setuptools installed"
 echo "☕️ Installing Node.js LTS..."
 fnm install --lts
 source "$(fnm env)"
-fnm default $(fnm list --lts | head -n 1)
+LTS_VERSION=$(fnm list | grep -E '^\s*\d+\.\d+\.\d+\s*(default)?$' | tail -1 | awk '{print $1}')
+fnm default $LTS_VERSION
 node -v
 echo "✅ Node.js installed"
 
