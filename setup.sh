@@ -244,7 +244,7 @@ export PYENV_ROOT="\$HOME/.pyenv"
 eval "\$(pyenv init -)"
 
 # Rust
-source "\$HOME/.cargo/env"
+#source "\$HOME/.cargo/env"
 
 # Fnm
 eval "\`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`"
