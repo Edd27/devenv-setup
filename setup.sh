@@ -276,8 +276,16 @@ alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset
 alias l="erd"
 alias ls="erd"
 
+# Pyenv
+export PYENV_ROOT="\$HOME/.pyenv"
+[[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
+eval "\$(pyenv init -)"
+
 # Rust
-source "\$HOME/.cargo/bin"
+#source "\$HOME/.cargo/bin"
+
+# Fnm
+eval "\`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`"
 
 EOL
 fi
