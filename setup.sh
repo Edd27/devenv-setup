@@ -247,7 +247,7 @@ eval "\$(pyenv init -)"
 #source "\$HOME/.cargo/env"
 
 # Fnm
-eval "\`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`"
+eval "\$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 
 EOL
 
@@ -285,7 +285,7 @@ eval "\$(pyenv init -)"
 #source "\$HOME/.cargo/bin"
 
 # Fnm
-eval "\`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`"
+eval "\$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
 
 EOL
 fi
@@ -309,7 +309,7 @@ echo "✅ Setuptools installed"
 
 echo "☕️ Installing Node.js LTS..."
 fnm install --lts
-source "$(fnm env)"
+zsh -c "source <(fnm env --shell zsh)"
 LTS_VERSION=$(fnm list | grep -E '^\s*\d+\.\d+\.\d+\s*(default)?$' | tail -1 | awk '{print $1}')
 fnm default $LTS_VERSION
 node -v
