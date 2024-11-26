@@ -78,12 +78,12 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
 1. Abre la terminal y ejecuta el siguiente comando
   - Linux
     ```sh
-    sudo apt update; sudo apt -y upgrade; sudo apt install -y curl; \
-    curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh | bash -i
+    sudo apt install -y curl; \
+    bash -i <(curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
     ```
   - macOS
     ```sh
-    curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh | bash -i
+    bash -i <(curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
     ```
 
 <p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
