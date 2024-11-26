@@ -60,7 +60,7 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
 - Alguno de estos sistemas operativos:
   - Windows con WSL2
     ```sh
-    wsl --install -d Debian
+    wsl --install Debian
     ```
   - Linux (Ubuntu o Debian)
 
@@ -79,11 +79,11 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
   - Linux
     ```sh
     sudo apt update; sudo apt -y upgrade; sudo apt install -y curl; \
-    bash -i <(curl -s https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
+    zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
     ```
   - macOS
     ```sh
-    bash -i <(curl -s https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
+    zsh -i <(curl -s https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
     ```
 
 <p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
