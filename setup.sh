@@ -191,7 +191,11 @@ else
 fi
 
 echo "☕️ Installing fnm..."
-curl -fsSL https://fnm.vercel.app/install | bash
+if [[ "$os_type" == "Linux" ]]; then
+    curl -fsSL https://fnm.vercel.app/install | bash
+else
+    brew install fnm
+fi
 echo "✅ Fnm installed"
 
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
