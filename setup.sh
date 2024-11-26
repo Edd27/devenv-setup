@@ -328,14 +328,17 @@ EOL
 echo "✅ Erdtree configuration added"
 
 ZSHRC_FILE=~/.zshrc
+
 if [[ "$os_type" == "Darwin" ]]; then
-    sed -i '' 's/^#\(export ZSH="\\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
+    sed -i '' 's/^#\(export ZSH="\$HOME\/.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
-    sed -i '' 's/^#\(source \\$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
+    sed -i '' 's/^#\(source \$ZSH\/oh-my-zsh.sh\)/\1/' "$ZSHRC_FILE"
+    sed -i '' 's/^#\(source \$HOME\/.cargo\/bin\)/\1/' "$ZSHRC_FILE"
 else
-    sed -i 's/^#\(export ZSH="\\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
+    sed -i 's/^#\(export ZSH="\$HOME\/.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
-    sed -i 's/^#\(source \\$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
+    sed -i 's/^#\(source \$ZSH\/oh-my-zsh.sh\)/\1/' "$ZSHRC_FILE"
+    sed -i 's/^#\(source \$HOME\/.cargo\/bin\)/\1/' "$ZSHRC_FILE"
 fi
 
 cd ~
