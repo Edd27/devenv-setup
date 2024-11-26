@@ -11,15 +11,6 @@ if [[ "$os_type" != "Linux" ]] && [[ "$os_type" != "Darwin" ]]; then
     exit 1
 fi
 
-echo "☕️ Verifying if ZSH is default shell..."
-
-if [[ "$SHELL" != *"zsh" ]]; then
-    echo "❌ zsh is not the default shell. Exiting..."
-    exit 1
-else
-    echo "✅ ZSH is default shell"
-fi
-
 if [[ "$os_type" == "Linux" ]]; then
     source /etc/os-release
 
@@ -29,6 +20,16 @@ if [[ "$os_type" == "Linux" ]]; then
     fi
 
     echo "OS detected: 🐧 $NAME"
+
+    echo "☕️ Verifying if ZSH is default shell..."
+
+    if [[ "$SHELL" != *"zsh" ]]; then
+        echo "❌ zsh is not the default shell. Exiting..."
+        exit 1
+    else
+        echo "✅ ZSH is default shell"
+    fi
+
     echo "☕️ Updating..."
 
     sudo apt update && sudo apt upgrade -y || { echo "❌ Update failed!"; exit 1; }
@@ -40,8 +41,29 @@ if [[ "$os_type" == "Linux" ]]; then
         libffi-dev liblzma-dev
     echo "✅ Tools installed"
 
+    echo "☕️ Installing fnm..."
+    curl -fsSL https://fnm.vercel.app/install | bash
+    echo "✅ Fnm installed"
+
+    echo "☕️ Installing Pyenv..."
+    curl https://pyenv.run | bash
+    echo "✅ Pyenv installed"
+
+    echo "☕️ Installing rust..."
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    echo "✅ Rust installed"
+
 elif [[ "$os_type" == "Darwin" ]]; then
     echo "OS detected: 🍎 macOS"
+
+    echo "☕️ Verifying if ZSH is default shell..."
+
+    if [[ "$SHELL" != *"zsh" ]]; then
+        echo "❌ zsh is not the default shell. Exiting..."
+        exit 1
+    else
+        echo "✅ ZSH is default shell"
+    fi
 
     if ! command -v brew &>/dev/null; then
         echo "☕️ Installing Homebrew..."
@@ -60,7 +82,7 @@ elif [[ "$os_type" == "Darwin" ]]; then
     echo "✅ Homebrew updated"
 
     echo "☕️ Installing Homebrew console tools..."
-    brew install bat scc openssl readline sqlite3 xz zlib tcl-tk
+    brew install fnm pyenv rust bat scc openssl readline sqlite3 xz zlib tcl-tk
     echo "✅ Homebrew console tools installed"
 
     echo "☕️ Installing Homebrew Casks..."
@@ -69,18 +91,6 @@ elif [[ "$os_type" == "Darwin" ]]; then
         onedrive microsoft-onenote mongodb-compass notion postman rectangle runjs spotify visual-studio-code whatsapp
     echo "✅ Homebrew casks tools installed"
 fi
-
-echo "☕️ Installing Pyenv..."
-if [[ "$os_type" == "Linux" ]]; then
-    curl https://pyenv.run | bash
-else
-    brew install pyenv
-fi
-echo "✅ Pyenv installed"
-
-echo "☕️ Installing rust..."
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-echo "✅ Rust installed"
 
 echo "☕️ Creating ssh directory..."
 mkdir -p ~/.ssh
@@ -172,31 +182,13 @@ echo "☕️ Creating work directories..."
 mkdir -p ~/dev/magnotechnology
 echo "✅ Work directories created"
 
-echo "☕️ Adding erdtree configuration..."
-cat <<EOL > ~/.erdtreerc
---level 2
---icons
---human
--s size
-EOL
-echo "✅ Erdtree configuration added"
-
 if [[ -d "$HOME/.oh-my-zsh" ]]; then
     echo "✅ Oh My Zsh is already installed."
 else
     echo "☕️ Installing Oh My Zsh..."
     git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
-    cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
     echo "✅ Oh My Zsh installed."
 fi
-
-echo "☕️ Installing fnm..."
-if [[ "$os_type" == "Linux" ]]; then
-    curl -fsSL https://fnm.vercel.app/install | bash
-else
-    brew install fnm
-fi
-echo "✅ Fnm installed"
 
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
 
@@ -222,6 +214,17 @@ clone_zsh_plugin "zsh-bat" "https://github.com/fdellwing/zsh-bat.git"
 echo "☕️ Editing ZSH configuration file..."
 cat <<EOL >> ~/.zshrc
 
+# Oh My Zsh installation.
+#export ZSH="$HOME/.oh-my-zsh"
+
+# Theme
+#ZSH_THEME="robbyrussell"
+
+# Plugins
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
+
+#source $ZSH/oh-my-zsh.sh
+
 # Custom aliases
 alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
@@ -229,28 +232,21 @@ alias home="cd ~ && erd"
 alias dev="cd ~/dev && erd"
 alias gpm="gp origin main"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='$github_email'"
+alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
 alias l="erd"
 alias ls="erd"
 
 # pyenv
-export PYENV_ROOT="\$HOME/.pyenv"
-[[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
-eval "\$(pyenv init -)"
-# pyenv end
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
 # rust
-source "\$HOME/.cargo/env"
-# rust end
-EOL
+source "$HOME/.cargo/env"
 
-if [[ "$os_type" == "Darwin" ]]; then
-    sed -i '' 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
-    sed -i '' 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|g' ~/.zshrc
-else
-    sed -i 's/plugins=(.*)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)/' ~/.zshrc
-    sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|g' ~/.zshrc
-fi
+# fnm
+eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"
+EOL
 
 echo "✅ ZSH configuration file edited"
 
@@ -278,6 +274,20 @@ echo "✅ Node.js installed"
 echo "☕️ Installing Erdtree..."
 cargo install erdtree
 echo "✅ Erdtree installed"
+
+echo "☕️ Adding Erdtree configuration..."
+cat <<EOL > ~/.erdtreerc
+--level 2
+--icons
+--human
+-s size
+EOL
+echo "✅ Erdtree configuration added"
+
+ZSHRC_FILE=~/.zshrc
+sed -i 's/^#\(export ZSH="\$HOME\/\.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
+sed -i 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
+sed -i 's/^#\(source \$ZSH\/oh-my-zsh\.sh\)/\1/' "$ZSHRC_FILE"
 
 cd ~
 
