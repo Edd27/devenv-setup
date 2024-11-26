@@ -40,19 +40,6 @@ if [[ "$os_type" == "Linux" ]]; then
         libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
         libffi-dev liblzma-dev
     echo "✅ Tools installed"
-
-    echo "☕️ Installing fnm..."
-    curl -fsSL https://fnm.vercel.app/install | bash
-    echo "✅ Fnm installed"
-
-    echo "☕️ Installing Pyenv..."
-    curl https://pyenv.run | bash
-    echo "✅ Pyenv installed"
-
-    echo "☕️ Installing rust..."
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    echo "✅ Rust installed"
-
 elif [[ "$os_type" == "Darwin" ]]; then
     echo "OS detected: 🍎 macOS"
 
@@ -82,7 +69,7 @@ elif [[ "$os_type" == "Darwin" ]]; then
     echo "✅ Homebrew updated"
 
     echo "☕️ Installing Homebrew console tools..."
-    brew install fnm pyenv rust bat scc openssl readline sqlite3 xz zlib tcl-tk
+    brew install bat scc openssl readline sqlite3 xz zlib tcl-tk
     echo "✅ Homebrew console tools installed"
 
     echo "☕️ Installing Homebrew Casks..."
@@ -91,6 +78,14 @@ elif [[ "$os_type" == "Darwin" ]]; then
         onedrive microsoft-onenote mongodb-compass notion postman rectangle runjs spotify visual-studio-code whatsapp
     echo "✅ Homebrew casks tools installed"
 fi
+
+echo "☕️ Installing Pyenv..."
+curl https://pyenv.run | bash
+echo "✅ Pyenv installed"
+
+echo "☕️ Installing rust..."
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+echo "✅ Rust installed"
 
 echo "☕️ Creating ssh directory..."
 mkdir -p ~/.ssh
@@ -213,9 +208,7 @@ clone_zsh_plugin "zsh-bat" "https://github.com/fdellwing/zsh-bat.git"
 
 echo "☕️ Editing ZSH configuration file..."
 
-if [[ "$os_type" == "Linux" ]]; then
-    cat <<EOL >> ~/.zshrc
-
+cat <<EOL > ~/.zshrc
 # Oh My Zsh installation.
 #export ZSH="\$HOME/.oh-my-zsh"
 
@@ -243,54 +236,19 @@ export PYENV_ROOT="\$HOME/.pyenv"
 [[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
 eval "\$(pyenv init -)"
 
-# Rust
-#source "\$HOME/.cargo/env"
-
-# Fnm
-eval "\$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
-
-EOL
-
-elif [[ "$os_type" == "Darwin" ]]; then
-    cat <<EOL >> ~/.zshrc
-
-# Oh My Zsh installation.
-#export ZSH="\$HOME/.oh-my-zsh"
-
-# Theme
-#ZSH_THEME="robbyrussell"
-
-# Plugins
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
-
-#source "\$ZSH/oh-my-zsh.sh"
-
-# Custom aliases
-alias zshconfig="code ~/.zshrc"
-alias ohmyzsh="code ~/.oh-my-zsh"
-alias home="cd ~ && erd"
-alias dev="cd ~/dev && erd"
-alias gpm="gp origin main"
-alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
-alias l="erd"
-alias ls="erd"
-
-# Pyenv
-export PYENV_ROOT="\$HOME/.pyenv"
-[[ -d \$PYENV_ROOT/bin ]] && export PATH="\$PYENV_ROOT/bin:\$PATH"
-eval "\$(pyenv init -)"
-
-# Rust
-#source "\$HOME/.cargo/bin"
-
-# Fnm
-eval "\$(fnm env --use-on-cd --version-file-strategy=recursive --shell zsh)"
-
-EOL
+# Cargo
+CARGO_ENV_PATH="\$HOME/.cargo/env"
+if [ -d "$CARGO_ENV_PATH" ]; then
+  source "\$HOME/.cargo/env"
 fi
 
+EOL
+
 echo "✅ ZSH configuration file edited"
+
+echo "☕️ Installing fnm..."
+curl -fsSL https://fnm.vercel.app/install | bash
+echo "✅ Fnm installed"
 
 echo "☕️ Reloading ZSH shell..."
 source ~/.zshrc
@@ -310,7 +268,8 @@ echo "✅ Setuptools installed"
 echo "☕️ Installing Node.js LTS..."
 fnm install --lts
 LTS_VERSION=$(fnm list | grep -E '^\s*\d+\.\d+\.\d+\s*(default)?$' | tail -1 | awk '{print $1}')
-fnm default $LTS_VERSION
+echo "LTS Version detected: $LTS_VERSION"
+fnm default "$LTS_VERSION"
 node -v
 echo "✅ Node.js installed"
 
@@ -333,12 +292,12 @@ if [[ "$os_type" == "Darwin" ]]; then
     sed -i '' 's/^#\(export ZSH="\$HOME\/.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's/^#\(source "\$ZSH\/oh-my-zsh.sh"\)/\1/' "$ZSHRC_FILE"
-    sed -i '' 's/^#\(source "\$HOME\/.cargo\/bin"\)/\1/' "$ZSHRC_FILE"
+    sed -i '' 's/^eval \`fnm env .*\`/eval \`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`/' "$ZSHRC_FILE"
 else
     sed -i 's/^#\(export ZSH="\$HOME\/.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
     sed -i 's/^#\(source "\$ZSH\/oh-my-zsh.sh"\)/\1/' "$ZSHRC_FILE"
-    sed -i 's/^#\(source "\$HOME\/.cargo\/env"\)/\1/' "$ZSHRC_FILE"
+    sed -i 's/^eval \`fnm env .*\`/eval \`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`/' "$ZSHRC_FILE"
 fi
 
 cd ~
