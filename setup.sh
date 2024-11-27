@@ -237,11 +237,8 @@ export PYENV_ROOT="\$HOME/.pyenv"
 eval "\$(pyenv init -)"
 
 # Cargo
-CARGO_ENV_PATH="\$HOME/.cargo/env"
-if [ -d "\$CARGO_ENV_PATH" ]; then
-  source "\$HOME/.cargo/env"
-fi
-
+export CARGO_ROOT="$HOME/.cargo"
+[[ -d \$CARGO_ROOT/bin ]] && export PATH="\$CARGO_ROOT/bin:\$PATH"
 EOL
 
 echo "✅ ZSH configuration file edited"
