@@ -264,10 +264,9 @@ echo "✅ Setuptools installed"
 
 echo "☕️ Installing Node.js LTS..."
 fnm install --lts
-LTS_VERSION=$(fnm list | grep -E '^\s*\d+\.\d+\.\d+\s*(default)?$' | tail -1 | awk '{print $1}')
-echo "LTS Version detected: $LTS_VERSION"
-fnm default "$LTS_VERSION"
-echo "✅ Node.js installed"
+NODE_LTS_VERSION=$(fnm ls | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+fnm default "$NODE_LTS_VERSION"
+echo "✅ Node.js LTS installed and set as default"
 
 echo "☕️ Installing Erdtree..."
 cargo install erdtree
