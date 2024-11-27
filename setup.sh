@@ -239,6 +239,9 @@ eval "\$(pyenv init -)"
 # Cargo
 export CARGO_ROOT="$HOME/.cargo"
 [[ -d \$CARGO_ROOT/bin ]] && export PATH="\$CARGO_ROOT/bin:\$PATH"
+
+# Fnm
+eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"
 EOL
 
 echo "✅ ZSH configuration file edited"
