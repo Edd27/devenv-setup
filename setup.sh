@@ -264,8 +264,13 @@ echo "✅ Setuptools installed"
 
 echo "☕️ Installing Node.js LTS..."
 fnm install --lts
-NODE_LTS_VERSION=$(fnm ls | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
-fnm default "$NODE_LTS_VERSION"
+if [[ "$os_type" == "Linux" ]]; then
+    NODE_LTS_VERSION=$(fnm ls | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+    fnm default "$NODE_LTS_VERSION"
+elif [[ "$os_type" == "Darwin" ]]; then
+    NODE_LTS_VERSION=$(fnm ls | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+    fnm default "$NODE_LTS_VERSION"
+fi
 echo "✅ Node.js LTS installed and set as default"
 
 echo "☕️ Installing Erdtree..."
