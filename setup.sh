@@ -238,7 +238,7 @@ eval "\$(pyenv init -)"
 
 # Cargo
 CARGO_ENV_PATH="\$HOME/.cargo/env"
-if [ -d "$CARGO_ENV_PATH" ]; then
+if [ -d "\$CARGO_ENV_PATH" ]; then
   source "\$HOME/.cargo/env"
 fi
 
