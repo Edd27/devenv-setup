@@ -267,7 +267,6 @@ fnm install --lts
 LTS_VERSION=$(fnm list | grep -E '^\s*\d+\.\d+\.\d+\s*(default)?$' | tail -1 | awk '{print $1}')
 echo "LTS Version detected: $LTS_VERSION"
 fnm default "$LTS_VERSION"
-node -v
 echo "✅ Node.js installed"
 
 echo "☕️ Installing Erdtree..."
@@ -289,12 +288,12 @@ if [[ "$os_type" == "Darwin" ]]; then
     sed -i '' 's/^#\(export ZSH="\$HOME\/.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's/^#\(source "\$ZSH\/oh-my-zsh.sh"\)/\1/' "$ZSHRC_FILE"
-    sed -i '' 's|^eval "\`fnm env .*`"|eval "\`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`"|' "$ZSHRC_FILE"
+    sed -i '' 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|' "$ZSHRC_FILE"
 else
     sed -i 's/^#\(export ZSH="\$HOME\/.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i 's/^#\(ZSH_THEME="robbyrussell"\)/\1/' "$ZSHRC_FILE"
     sed -i 's/^#\(source "\$ZSH\/oh-my-zsh.sh"\)/\1/' "$ZSHRC_FILE"
-    sed -i 's|^eval "\`fnm env .*`"|eval "\`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh\`"|' "$ZSHRC_FILE"
+    sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|' "$ZSHRC_FILE"
 fi
 
 cd ~
