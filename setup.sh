@@ -168,6 +168,7 @@ build
 *-lock.json
 *.gyp
 .vscode
+.env*
 EOL
 echo "✅ Global git configured"
 
