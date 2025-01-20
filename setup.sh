@@ -209,14 +209,6 @@ clone_zsh_plugin "zsh-bat" "https://github.com/fdellwing/zsh-bat.git"
 
 echo "☕️ Editing ZSH configuration file..."
 
-function parse_git_branch() {
-    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/ [\1]/p'
-}
-
-COLOR_DEF=$'%f'
-
-COLOR_GIT=$'%F{blue}'
-
 cat <<EOL > ~/.zshrc
 # Prompt
 function parse_git_branch() {
