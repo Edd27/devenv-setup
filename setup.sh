@@ -216,7 +216,7 @@ function parse_git_branch() {
 }
 COLOR_DEF=$'%f'
 COLOR_GIT=$'%F{blue}'
-export PROMPT='%~${COLOR_GIT}$(parse_git_branch)${COLOR_DEF} ❯ '
+export PROMPT='%~\${COLOR_GIT}\$(parse_git_branch)\${COLOR_DEF} ❯ '
 
 # Oh My Zsh installation.
 #export ZSH="\$HOME/.oh-my-zsh"
@@ -246,7 +246,7 @@ export PYENV_ROOT="\$HOME/.pyenv"
 eval "\$(pyenv init -)"
 
 # Cargo
-export CARGO_ROOT="$HOME/.cargo"
+export CARGO_ROOT="\$HOME/.cargo"
 [[ -d \$CARGO_ROOT/bin ]] && export PATH="\$CARGO_ROOT/bin:\$PATH"
 
 # Fnm
