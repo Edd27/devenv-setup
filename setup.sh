@@ -75,7 +75,7 @@ elif [[ "$os_type" == "Darwin" ]]; then
     echo "☕️ Installing Homebrew Casks..."
     brew install --cask appcleaner bitwarden cursor dbeaver-community discord docker drawio figma google-chrome insomnia keyboardcleantool macs-fan-control \
         microsoft-auto-update microsoft-teams microsoft-word microsoft-excel microsoft-powerpoint microsoft-outlook \
-        onedrive microsoft-onenote mongodb-compass notion postman rectangle runjs sourcetree spotify tunnelblick visual-studio-code warp whatsapp windows-app
+        onedrive microsoft-onenote mongodb-compass notion postman rectangle runjs sourcetree spotify tunnelblick visual-studio-code vlc warp whatsapp windows-app
     echo "✅ Homebrew casks tools installed"
 fi
 
