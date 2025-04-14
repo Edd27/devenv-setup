@@ -91,6 +91,8 @@ mkdir -p ~/.ssh
 echo "✅ SSH directory created"
 
 read -p "🛠 Do you want to generate and configure an SSH key for GitHub? (yes/no): " generate_ssh
+generate_ssh=$(echo "$generate_ssh" | tr '[:upper:]' '[:lower:]' | xargs)
+
 if [[ "$generate_ssh" == "yes" ]]; then
     echo "☕️ Creating ssh directory..."
     mkdir -p ~/.ssh
