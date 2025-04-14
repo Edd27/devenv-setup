@@ -101,9 +101,9 @@ if [[ "$generate_ssh" == "yes" ]]; then
     cd ~/.ssh || exit
 
     echo "☕️ Generating ssh key for GitHub..."
-    read -p "SSH Key name (press Enter to use default: GitHub): " ssh_key_name
+    read -p "Enter SSH Key name (press Enter to use default: GitHub): " ssh_key_name
     ssh_key_name=${ssh_key_name:-GitHub}
-    read -p "GitHub email: " github_email
+    read -p "Enter your GitHub email: " github_email
     github_email=${github_email:-me@example.com}
 
     ssh-keygen -t ed25519 -b 4096 -C "$github_email" -f "$ssh_key_name" -N ""
@@ -133,9 +133,10 @@ EOL
     echo "✅ GitHub SSH key generated"
 
     if [[ "$os_type" == "Linux" ]]; then
-        xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub || echo "xclip not installed, unable to copy SSH key."
+        xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub && echo "📋 SSH Key copied to clipboard, past to your GitHub account" || echo "xclip not installed, unable to copy SSH key."
     else
         pbcopy < ~/.ssh/$ssh_key_name.pub
+        echo "📋 SSH Key copied to clipboard, past to your GitHub account"
     fi
 
     read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
