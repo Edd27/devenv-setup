@@ -274,9 +274,8 @@ source ~/.zshrc
 echo "✅ ZSH shell reloaded"
 
 echo "☕️ Installing python..."
-pyenv install 2
 pyenv install 3
-pyenv global 2
+pyenv global 3
 echo "✅ Python versions installed"
 
 echo "☕️ Installing setuptools..."
