@@ -101,17 +101,14 @@ if [[ "$generate_ssh" == "yes" ]]; then
     cd ~/.ssh || exit
 
     echo "☕️ Generating ssh key for GitHub..."
-    read -p "SSH Key name: " ssh_key_name
+    read -p "SSH Key name (press Enter to use default: GitHub): " ssh_key_name
+    ssh_key_name=${ssh_key_name:-GitHub}
     read -p "GitHub email: " github_email
+    github_email=${github_email:-me@example.com}
 
     ssh-keygen -t ed25519 -b 4096 -C "$github_email" -f "$ssh_key_name" -N ""
     eval "$(ssh-agent -s)"
     ssh-add "$ssh_key_name"
-
-    if [[ -z "$ssh_key_name" ]]; then
-        echo "❌ SSH key name is not set."
-        exit 1
-    fi
 
     if [[ "$os_type" == "Linux" ]]; then
         cat <<EOL > ~/.ssh/config
@@ -142,6 +139,8 @@ EOL
     fi
 
     read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
+    ssh_added=$(echo "$ssh_added" | tr '[:upper:]' '[:lower:]' | xargs)
+
     if [[ "$ssh_added" == "yes" ]]; then
         ssh -T git@github.com
         echo "✅ GitHub SSH added"
@@ -153,13 +152,15 @@ else
 fi
 
 echo "☕️ Configuring global git..."
-read -p "Complete name: " git_complete_name
+read -p "Your complete name: " git_complete_name
 git config --global user.name "$git_complete_name"
 git config --global user.email "$github_email"
 git config --global core.editor "code --wait"
-read -p "Global gitignore file path: " git_global_gitignore_file_path
+read -p "Enter global gitignore file path (press Enter to use default: ~/.gitignore): " git_global_gitignore_file_path
+git_global_gitignore_file_path=${git_global_gitignore_file_path:-~/.gitignore}
 git config --global core.excludesfile "$git_global_gitignore_file_path"
-read -p "Default init branch: " git_default_init_branch
+read -p "Enter the default init branch name (press Enter to use default: main): " git_default_init_branch
+git_default_init_branch=${git_default_init_branch:-main}
 git config --global init.defaultbranch "$git_default_init_branch"
 git config --global core.fileMode false
 git config --global --add safe.directory '*'
@@ -180,7 +181,7 @@ build
 .vscode
 .env*
 EOL
-echo "✅ Global git configured"
+echo "✅ Global git configuration updated"
 
 touch ~/.hushlogin
 
