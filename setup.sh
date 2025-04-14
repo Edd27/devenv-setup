@@ -153,7 +153,7 @@ else
 fi
 
 echo "☕️ Configuring global git..."
-read -p "Your complete name: " git_complete_name
+read -p "Enter your complete name: " git_complete_name
 git config --global user.name "$git_complete_name"
 git config --global user.email "$github_email"
 git config --global core.editor "code --wait"
