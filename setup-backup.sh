@@ -73,8 +73,9 @@ elif [[ "$os_type" == "Darwin" ]]; then
     echo "✅ Homebrew console tools installed"
 
     echo "☕️ Installing Homebrew Casks..."
-    brew install --cask appcleaner dbeaver-community docker google-chrome keyboardcleantool macs-fan-control \
-        rectangle spotify visual-studio-code vlc windows-app
+    brew install --cask appcleaner bitwarden cursor dbeaver-community discord docker drawio figma google-chrome insomnia keyboardcleantool macs-fan-control \
+        microsoft-auto-update microsoft-teams microsoft-word microsoft-excel microsoft-powerpoint microsoft-outlook \
+        onedrive microsoft-onenote mongodb-compass notion postman rectangle runjs sourcetree spotify tunnelblick visual-studio-code vlc warp whatsapp windows-app
     echo "✅ Homebrew casks tools installed"
 fi
 
@@ -90,29 +91,23 @@ echo "☕️ Creating ssh directory..."
 mkdir -p ~/.ssh
 echo "✅ SSH directory created"
 
-read -p "🛠 Do you want to generate and configure an SSH key for GitHub? (yes/no): " generate_ssh
-if [[ "$generate_ssh" == "yes" ]]; then
-    echo "☕️ Creating ssh directory..."
-    mkdir -p ~/.ssh
-    echo "✅ SSH directory created"
+cd ~/.ssh || exit
 
-    cd ~/.ssh || exit
+echo "☕️ Generating ssh key for GitHub..."
+read -p "SSH Key name: " ssh_key_name
+read -p "GitHub email: " github_email
 
-    echo "☕️ Generating ssh key for GitHub..."
-    read -p "SSH Key name: " ssh_key_name
-    read -p "GitHub email: " github_email
+ssh-keygen -t ed25519 -b 4096 -C "$github_email" -f "$ssh_key_name" -N ""
+eval "$(ssh-agent -s)"
+ssh-add "$ssh_key_name"
 
-    ssh-keygen -t ed25519 -b 4096 -C "$github_email" -f "$ssh_key_name" -N ""
-    eval "$(ssh-agent -s)"
-    ssh-add "$ssh_key_name"
+if [[ -z "$ssh_key_name" ]]; then
+    echo "❌ SSH key name is not set."
+    exit 1
+fi
 
-    if [[ -z "$ssh_key_name" ]]; then
-        echo "❌ SSH key name is not set."
-        exit 1
-    fi
-
-    if [[ "$os_type" == "Linux" ]]; then
-        cat <<EOL > ~/.ssh/config
+if [[ "$os_type" == "Linux" ]]; then
+    cat <<EOL > ~/.ssh/config
 # Personal Github
 Host github.com
   HostName github.com
@@ -120,8 +115,8 @@ Host github.com
   AddKeysToAgent yes
   IdentityFile ~/.ssh/$ssh_key_name
 EOL
-    elif [[ "$os_type" == "Darwin" ]]; then
-        cat <<EOL > ~/.ssh/config
+elif [[ "$os_type" == "Darwin" ]]; then
+    cat <<EOL > ~/.ssh/config
 # Personal Github
 Host github.com
   HostName github.com
@@ -130,24 +125,21 @@ Host github.com
   UseKeychain yes
   IdentityFile ~/.ssh/$ssh_key_name
 EOL
-    fi
-    echo "✅ GitHub SSH key generated"
+fi
+echo "✅ GitHub SSH key generated"
 
-    if [[ "$os_type" == "Linux" ]]; then
-        xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub || echo "xclip not installed, unable to copy SSH key."
-    else
-        pbcopy < ~/.ssh/$ssh_key_name.pub
-    fi
-
-    read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
-    if [[ "$ssh_added" == "yes" ]]; then
-        ssh -T git@github.com
-        echo "✅ GitHub SSH added"
-    else
-        echo "⏩ Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
-    fi
+if [[ "$os_type" == "Linux" ]]; then
+    xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub || echo "xclip not installed, unable to copy SSH key."
 else
-    echo "⏩ Skipping SSH key generation and configuration."
+    pbcopy < ~/.ssh/$ssh_key_name.pub
+fi
+
+read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
+if [[ "$ssh_added" == "yes" ]]; then
+    ssh -T git@github.com
+    echo "✅ GitHub SSH added"
+else
+    echo "⏩ Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
 fi
 
 echo "☕️ Configuring global git..."
@@ -183,7 +175,7 @@ echo "✅ Global git configured"
 touch ~/.hushlogin
 
 echo "☕️ Creating work directories..."
-mkdir -p ~/dev
+mkdir -p ~/dev/magnotechnology
 echo "✅ Work directories created"
 
 if [[ -d "$HOME/.oh-my-zsh" ]]; then
@@ -240,11 +232,13 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
 # Custom aliases
 alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
-alias home="cd ~ && ls"
-alias dev="cd ~/dev && ls"
+alias home="cd ~ && erd"
+alias dev="cd ~/dev && erd"
 alias gpm="gp origin main"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
+alias l="erd"
+alias ls="erd"
 
 # Pyenv
 export PYENV_ROOT="\$HOME/.pyenv"
@@ -272,7 +266,7 @@ echo "✅ ZSH shell reloaded"
 echo "☕️ Installing python..."
 pyenv install 2
 pyenv install 3
-pyenv global 2
+pyenv global 3
 echo "✅ Python versions installed"
 
 echo "☕️ Installing setuptools..."
@@ -290,6 +284,19 @@ elif [[ "$os_type" == "Darwin" ]]; then
     fnm default "$NODE_18_VERSION"
 fi
 echo "✅ Node.js 18 installed and set as default"
+
+echo "☕️ Installing Erdtree..."
+cargo install erdtree
+echo "✅ Erdtree installed"
+
+echo "☕️ Adding Erdtree configuration..."
+cat <<EOL > ~/.erdtreerc
+--level 2
+--icons
+--human
+-s size
+EOL
+echo "✅ Erdtree configuration added"
 
 ZSHRC_FILE=~/.zshrc
 
