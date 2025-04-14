@@ -67,6 +67,8 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
 - ZSH como shell por defecto
   1. Instalar ZSH
     ```sh
+    sudo apt update; \
+    sudo apt upgrade -y; \
     sudo apt install zsh; \
       zsh --version; \
       chsh -s $(which zsh)
@@ -78,6 +80,8 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
 1. Abre la terminal y ejecuta el siguiente comando
   - Linux
     ```sh
+    sudo apt update; \
+    sudo apt upgrade -y; \
     sudo apt install -y curl; \
     bash -i <(curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
     ```
