@@ -63,8 +63,9 @@ En esta seccion se listan los prerequisitos para poder ejecutar los scripts de c
     wsl --install Debian
     ```
   - Linux (Ubuntu o Debian)
+  - macOS Catalina o posterior
 
-- ZSH como shell por defecto
+- ZSH como shell por defecto (Solor para Ubuntu, Debian o instancia de WSL2)
   1. Instalar ZSH
     ```sh
     sudo apt update; \
