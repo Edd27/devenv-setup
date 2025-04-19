@@ -73,7 +73,7 @@ elif [[ "$os_type" == "Darwin" ]]; then
     echo "✅ Homebrew console tools installed"
 
     echo "☕️ Installing Homebrew Casks..."
-    brew install --cask appcleaner dbeaver-community docker google-chrome keyboardcleantool macs-fan-control \
+    brew install --cask appcleaner claude dbngin docker google-chrome keyboardcleantool macs-fan-control \
         rectangle spotify visual-studio-code vlc windows-app
     echo "✅ Homebrew casks tools installed"
 fi
