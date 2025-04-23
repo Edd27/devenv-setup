@@ -220,11 +220,16 @@ echo "☕️ Editing ZSH configuration file..."
 cat <<EOL > ~/.zshrc
 # Prompt
 function parse_git_branch() {
-    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/ [\1]/p'
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/git:(\1)/p'
 }
-COLOR_DEF=$'%f'
-COLOR_GIT=$'%F{blue}'
-export PROMPT='%~\${COLOR_GIT}\$(parse_git_branch)\${COLOR_DEF} ❯ '
+COLOR_USER=\$'%F{green}'
+COLOR_SEPARATOR=\$'%F{8}'
+COLOR_HOSTNAME=\$'%F{magenta}'
+COLOR_PATH=\$'%F{yellow}'
+COLOR_GIT=\$'%F{cyan}'
+COLOR_DEF=\$'%f'
+export PROMPT='\${COLOR_USER}%n\${COLOR_SEPARATOR}＠\${COLOR_HOSTNAME}%m\${COLOR_PATH} %~\${COLOR_GIT} \$(parse_git_branch)\${COLOR_DEF}
+'
 
 # Oh My Zsh installation.
 #export ZSH="\$HOME/.oh-my-zsh"
