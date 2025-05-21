@@ -69,7 +69,7 @@ elif [[ "$os_type" == "Darwin" ]]; then
     echo "✅ Homebrew updated"
 
     echo "☕️ Installing Homebrew console tools..."
-    brew install bat scc openssl readline sqlite3 xz zlib tcl-tk
+    brew install bat scc openssl readline sqlite3 xz zlib tcl-tk gh
     echo "✅ Homebrew console tools installed"
 
     echo "☕️ Installing Homebrew Casks..."
