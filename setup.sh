@@ -148,22 +148,26 @@ else
     echo "⏩ Skipping SSH key generation and configuration."
 fi
 
-echo "☕️ Configuring global git..."
-read -p "Enter your complete name: " git_complete_name
-git config --global user.name "$git_complete_name"
-git config --global user.email "$github_email"
-git config --global core.editor "code --wait"
-read -p "Enter global gitignore file path (press Enter to use default: ~/.gitignore): " git_global_gitignore_file_path
-git_global_gitignore_file_path=${git_global_gitignore_file_path:-~/.gitignore}
-git config --global core.excludesfile "$git_global_gitignore_file_path"
-read -p "Enter the default init branch name (press Enter to use default: main): " git_default_init_branch
-git_default_init_branch=${git_default_init_branch:-main}
-git config --global init.defaultbranch "$git_default_init_branch"
-git config --global core.fileMode false
-git config --global --add safe.directory '*'
-git config --global core.autocrlf input
+read -p "🛠 Do you want to configure global Git configuration? (yes/no): " generate_global_git_config
+generate_global_git_config=$(echo "$generate_global_git_config" | tr '[:upper:]' '[:lower:]' | xargs)
 
-touch ~/.gitignore && cat <<EOL > ~/.gitignore
+if [[ "$generate_ssh" == "yes" ]]; then
+    echo "☕️ Configuring global git..."
+    read -p "Enter your complete name: " git_complete_name
+    git config --global user.name "$git_complete_name"
+    git config --global user.email "$github_email"
+    git config --global core.editor "code --wait"
+    read -p "Enter global gitignore file path (press Enter to use default: ~/.gitignore): " git_global_gitignore_file_path
+    git_global_gitignore_file_path=${git_global_gitignore_file_path:-~/.gitignore}
+    git config --global core.excludesfile "$git_global_gitignore_file_path"
+    read -p "Enter the default init branch name (press Enter to use default: main): " git_default_init_branch
+    git_default_init_branch=${git_default_init_branch:-main}
+    git config --global init.defaultbranch "$git_default_init_branch"
+    git config --global core.fileMode false
+    git config --global --add safe.directory '*'
+    git config --global core.autocrlf input
+
+    touch ~/.gitignore && cat <<EOL > ~/.gitignore
 node_modules
 .next
 dist
@@ -176,9 +180,13 @@ build
 *-lock.json
 *.gyp
 .vscode
+.cursor
 .env*
 EOL
-echo "✅ Global git configuration updated"
+    echo "✅ Global git configuration updated"
+else
+    echo "⏩ Skipping global Git configuration"
+fi
 
 touch ~/.hushlogin
 
