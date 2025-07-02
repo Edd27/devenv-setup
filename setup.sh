@@ -243,10 +243,16 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
 #source "\$ZSH/oh-my-zsh.sh"
 
 # Custom aliases
+setopt auto_cd
+cd() {
+  builtin cd "\$@" && ls -la --color=auto
+}
+alias ls="ls -la --color=auto"
+chpwd() {
+  ls -la --color=auto
+}
 alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
-alias home="cd ~ && ls"
-alias dev="cd ~/dev && ls"
 alias gpm="gp origin main"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
@@ -284,16 +290,16 @@ pip install --upgrade pip
 python -m pip install setuptools
 echo "✅ Setuptools installed"
 
-echo "☕️ Installing Node.js 18..."
-fnm install 18
+echo "☕️ Installing Node.js LTS..."
+fnm install --lts
 if [[ "$os_type" == "Linux" ]]; then
-    NODE_18_VERSION=$(fnm ls | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
-    fnm default "$NODE_18_VERSION"
+    NODE_LTS_VERSION=$(fnm ls | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+    fnm default "$NODE_LTS_VERSION"
 elif [[ "$os_type" == "Darwin" ]]; then
-    NODE_18_VERSION=$(fnm ls | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
-    fnm default "$NODE_18_VERSION"
+    NODE_LTS_VERSION=$(fnm ls | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+    fnm default "$NODE_LTS_VERSION"
 fi
-echo "✅ Node.js 18 installed and set as default"
+echo "✅ Node.js $NODE_LTS_VERSION installed and set as default"
 
 ZSHRC_FILE=~/.zshrc
 
@@ -302,11 +308,13 @@ if [[ "$os_type" == "Darwin" ]]; then
     sed -i '' 's/^#\(ZSH_THEME=""\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's/^#\(source "\$ZSH\/oh-my-zsh.sh"\)/\1/' "$ZSHRC_FILE"
     sed -i '' 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|' "$ZSHRC_FILE"
+    sed -i '' '/# Fnm/{N;/eval ""/d;}' "$ZSHRC_FILE"
 else
     sed -i 's/^#\(export ZSH="\$HOME\/.oh-my-zsh"\)/\1/' "$ZSHRC_FILE"
     sed -i 's/^#\(ZSH_THEME=""\)/\1/' "$ZSHRC_FILE"
     sed -i 's/^#\(source "\$ZSH\/oh-my-zsh.sh"\)/\1/' "$ZSHRC_FILE"
     sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|' "$ZSHRC_FILE"
+    sed -i '/# Fnm/{N;/eval ""/d;}' "$ZSHRC_FILE"
 fi
 
 cd ~
