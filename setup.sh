@@ -146,7 +146,7 @@ fi
 read -p "🛠 Do you want to configure global Git configuration? (yes/no): " generate_global_git_config
 generate_global_git_config=$(echo "$generate_global_git_config" | tr '[:upper:]' '[:lower:]' | xargs)
 
-if [[ "$generate_ssh" == "yes" ]]; then
+if [[ "$generate_global_git_config" == "yes" ]]; then
     echo -e "☕️ Configuring global git...\n"
     read -p "Enter your complete name: " git_complete_name
     git config --global user.name "$git_complete_name"
