@@ -93,13 +93,13 @@ if [[ "$generate_ssh" == "yes" ]]; then
 
     echo -e "☕️ Generating ssh key for GitHub...\n"
     read -p "Enter SSH Key name (press Enter to use default: GitHub): " ssh_key_name
-    ssh_key_name=${ssh_key_name:-GitHub}
+    ssh_key_name=${ssh_key_name:-github_personal}
     read -p "Enter your GitHub email: " github_email
     github_email=${github_email:-me@example.com}
-
-    ssh-keygen -t ed25519 -b 4096 -C "$github_email" -f "$ssh_key_name" -N ""
+    ssh_key_complete_name="id_rsa_$ssh_key_name"
+    ssh-keygen -t ed25519 -b 4096 -C "$github_email" -f "$ssh_key_complete_name" -N ""
     eval "$(ssh-agent -s)"
-    ssh-add "$ssh_key_name"
+    ssh-add "$ssh_key_complete_name"
 
     if [[ "$os_type" == "Linux" ]]; then
         cat <<EOL > ~/.ssh/config
@@ -108,7 +108,7 @@ Host github.com
   HostName github.com
   PreferredAuthentications publickey
   AddKeysToAgent yes
-  IdentityFile ~/.ssh/$ssh_key_name
+  IdentityFile ~/.ssh/$ssh_key_complete_name
 EOL
     elif [[ "$os_type" == "Darwin" ]]; then
         cat <<EOL > ~/.ssh/config
@@ -118,15 +118,15 @@ Host github.com
   PreferredAuthentications publickey
   AddKeysToAgent yes
   UseKeychain yes
-  IdentityFile ~/.ssh/$ssh_key_name
+  IdentityFile ~/.ssh/$ssh_key_complete_name
 EOL
     fi
     echo -e "✅ GitHub SSH key generated\n"
 
     if [[ "$os_type" == "Linux" ]]; then
-        xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub && echo -e "📋 SSH Key copied to clipboard, past to your GitHub account\n" || echo -e "xclip not installed, unable to copy SSH key\n"
+        xclip -selection clipboard < ~/.ssh/$ssh_key_complete_name.pub && echo -e "📋 SSH Key copied to clipboard, past to your GitHub account\n" || echo -e "xclip not installed, unable to copy SSH key\n"
     else
-        pbcopy < ~/.ssh/$ssh_key_name.pub
+        pbcopy < ~/.ssh/$ssh_key_complete_name.pub
         echo -e "📋 SSH Key copied to clipboard, past to your GitHub account\n"
     fi
 
