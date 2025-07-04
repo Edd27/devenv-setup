@@ -2,7 +2,7 @@
 
 os_type=$(uname)
 
-echo "☕️ Detecting OS..."
+echo -e "☕️ Detecting OS...\n"
 
 sleep 2
 
@@ -19,84 +19,79 @@ if [[ "$os_type" == "Linux" ]]; then
         exit 1
     fi
 
-    echo "OS detected: 🐧 $NAME"
+    echo -e "OS detected: 🐧 $NAME\n"
 
-    echo "☕️ Verifying if ZSH is default shell..."
+    echo -e "☕️ Verifying if ZSH is default shell...\n"
 
     if [[ "$SHELL" != *"zsh" ]]; then
         echo "❌ zsh is not the default shell. Exiting..."
         exit 1
     else
-        echo "✅ ZSH is default shell"
+        echo -e "✅ ZSH is default shell\n"
     fi
 
-    echo "☕️ Updating..."
-
-    sudo apt update && sudo apt upgrade -y || { echo "❌ Update failed!"; exit 1; }
-    echo "✅ Update completed"
-
-    echo "☕️ Installing tools..."
+    echo -e "☕️ Installing tools...\n"
     sudo apt install -y wget git unzip bat neofetch xclip build-essential libssl-dev zlib1g-dev \
         libbz2-dev libreadline-dev libsqlite3-dev libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev \
         libffi-dev liblzma-dev
-    echo "✅ Tools installed"
+    echo -e "✅ Tools installed\n"
 elif [[ "$os_type" == "Darwin" ]]; then
-    echo "OS detected: 🍎 macOS"
+    echo -e "OS detected: 🍎 macOS\n"
 
-    echo "☕️ Verifying if ZSH is default shell..."
+    echo -e "☕️ Verifying if ZSH is default shell...\n"
 
     if [[ "$SHELL" != *"zsh" ]]; then
         echo "❌ zsh is not the default shell. Exiting..."
         exit 1
     else
-        echo "✅ ZSH is default shell"
+        echo -e "✅ ZSH is default shell\n"
     fi
 
     if ! command -v brew &>/dev/null; then
-        echo "☕️ Installing Homebrew..."
+        echo -e "☕️ Installing Homebrew...\n"
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        echo "✅ Homebrew installed"
-        echo "☕️ Reloading ZSH shell..."
+        echo -e "✅ Homebrew installed\n"
+        echo -e "☕️ Reloading ZSH shell...\n"
         source ~/.zshrc
-        echo "✅ ZSH shell reloaded"
+        echo -e "✅ ZSH shell reloaded\n"
     else
-        echo "✅ Homebrew is already installed."
+        echo -e "✅ Homebrew is already installed\n"
     fi
 
-    echo "☕️ Updating Homebrew..."
+    echo -e "☕️ Updating Homebrew...\n"
     brew update
     brew upgrade
-    echo "✅ Homebrew updated"
+    echo -e "✅ Homebrew updated\n"
 
-    echo "☕️ Installing Homebrew console tools..."
+    echo -e "☕️ Installing Homebrew console tools...\n"
     brew install bat scc openssl readline sqlite3 xz zlib tcl-tk gh
-    echo "✅ Homebrew console tools installed"
+    echo -e "✅ Homebrew console tools installed\n"
 
-    echo "☕️ Installing Homebrew Casks..."
+    echo -e "☕️ Installing Homebrew Casks...\n"
     brew install --cask appcleaner bruno claude cursor dbeaver-community dbngin docker google-chrome keyboardcleantool libreoffice macs-fan-control \
         rectangle spotify visual-studio-code vlc warp windows-app
-    echo "✅ Homebrew casks tools installed"
+    echo -e "✅ Homebrew casks tools installed\n"
 fi
 
-echo "☕️ Installing Pyenv..."
+echo -e "☕️ Installing Pyenv...\n"
 curl https://pyenv.run | bash
-echo "✅ Pyenv installed"
+echo -e "✅ Pyenv installed\n"
 
-echo "☕️ Installing rust..."
+echo -e "☕️ Installing rust...\n"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-echo "✅ Rust installed"
+echo -e "✅ Rust installed\n"
 
 read -p "🛠 Do you want to generate and configure an SSH key for GitHub? (yes/no): " generate_ssh
 generate_ssh=$(echo "$generate_ssh" | tr '[:upper:]' '[:lower:]' | xargs)
 
 if [[ "$generate_ssh" == "yes" ]]; then
-    echo "☕️ Creating ssh directory..."
+    echo -e "☕️ Creating ssh directory...\n"
     mkdir -p ~/.ssh
-    echo "✅ SSH directory created"
+    echo -e "✅ SSH directory created\n"
 
     cd ~/.ssh || exit
 
-    echo "☕️ Generating ssh key for GitHub..."
+    echo -e "☕️ Generating ssh key for GitHub...\n"
     read -p "Enter SSH Key name (press Enter to use default: GitHub): " ssh_key_name
     ssh_key_name=${ssh_key_name:-GitHub}
     read -p "Enter your GitHub email: " github_email
@@ -126,13 +121,13 @@ Host github.com
   IdentityFile ~/.ssh/$ssh_key_name
 EOL
     fi
-    echo "✅ GitHub SSH key generated"
+    echo -e "✅ GitHub SSH key generated\n"
 
     if [[ "$os_type" == "Linux" ]]; then
-        xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub && echo "📋 SSH Key copied to clipboard, past to your GitHub account" || echo "xclip not installed, unable to copy SSH key."
+        xclip -selection clipboard < ~/.ssh/$ssh_key_name.pub && echo -e "📋 SSH Key copied to clipboard, past to your GitHub account\n" || echo -e "xclip not installed, unable to copy SSH key\n"
     else
         pbcopy < ~/.ssh/$ssh_key_name.pub
-        echo "📋 SSH Key copied to clipboard, past to your GitHub account"
+        echo -e "📋 SSH Key copied to clipboard, past to your GitHub account\n"
     fi
 
     read -p "Have you added the SSH key to your GitHub account? (yes/no): " ssh_added
@@ -140,19 +135,19 @@ EOL
 
     if [[ "$ssh_added" == "yes" ]]; then
         ssh -T git@github.com
-        echo "✅ GitHub SSH added"
+        echo -e "✅ GitHub SSH added\n"
     else
-        echo "⏩ Skipping SSH connection test. Please remember to test your SSH connection after adding the key."
+        echo -e "⏩ Skipping SSH connection test. Please remember to test your SSH connection after adding the key\n"
     fi
 else
-    echo "⏩ Skipping SSH key generation and configuration."
+    echo -e "⏩ Skipping SSH key generation and configuration\n"
 fi
 
 read -p "🛠 Do you want to configure global Git configuration? (yes/no): " generate_global_git_config
 generate_global_git_config=$(echo "$generate_global_git_config" | tr '[:upper:]' '[:lower:]' | xargs)
 
 if [[ "$generate_ssh" == "yes" ]]; then
-    echo "☕️ Configuring global git..."
+    echo -e "☕️ Configuring global git...\n"
     read -p "Enter your complete name: " git_complete_name
     git config --global user.name "$git_complete_name"
     git config --global user.email "$github_email"
@@ -183,23 +178,23 @@ build
 .cursor
 .env*
 EOL
-    echo "✅ Global git configuration updated"
+    echo -e "✅ Global git configuration updated\n"
 else
-    echo "⏩ Skipping global Git configuration"
+    echo -e "⏩ Skipping global Git configuration\n"
 fi
 
 touch ~/.hushlogin
 
-echo "☕️ Creating work directories..."
+echo -e "☕️ Creating work directories...\n"
 mkdir -p ~/dev
-echo "✅ Work directories created"
+echo -e "✅ Work directories created\n"
 
 if [[ -d "$HOME/.oh-my-zsh" ]]; then
-    echo "✅ Oh My Zsh is already installed."
+    echo -e "✅ Oh My Zsh is already installed\n"
 else
-    echo "☕️ Installing Oh My Zsh..."
+    echo -e "☕️ Installing Oh My Zsh...\n"
     git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
-    echo "✅ Oh My Zsh installed."
+    echo -e "✅ Oh My Zsh installed\n"
 fi
 
 ZSH_CUSTOM=${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
@@ -210,11 +205,11 @@ clone_zsh_plugin() {
     local plugin_dir="${ZSH_CUSTOM}/plugins/${plugin_name}"
 
     if [[ -d "$plugin_dir" ]]; then
-        echo "✅ ZSH plugin '${plugin_name}' is already installed."
+        echo -e "✅ ZSH plugin '${plugin_name}' is already installed\n"
     else
-        echo "☕️ Cloning '${plugin_name}' plugin..."
+        echo -e "☕️ Cloning '${plugin_name}' plugin...\n"
         git clone "$plugin_repo" "$plugin_dir"
-        echo "✅ '${plugin_name}' plugin installed."
+        echo -e "✅ '${plugin_name}' plugin installed\n"
     fi
 }
 
@@ -223,7 +218,7 @@ clone_zsh_plugin "zsh-syntax-highlighting" "https://github.com/zsh-users/zsh-syn
 clone_zsh_plugin "you-should-use" "https://github.com/MichaelAquilina/zsh-you-should-use.git"
 clone_zsh_plugin "zsh-bat" "https://github.com/fdellwing/zsh-bat.git"
 
-echo "☕️ Editing ZSH configuration file..."
+echo -e "☕️ Editing ZSH configuration file...\n"
 
 cat <<EOL > ~/.zshrc
 # Prompt
@@ -263,7 +258,6 @@ alias zshconfig="code ~/.zshrc"
 alias ohmyzsh="code ~/.oh-my-zsh"
 alias gpm="gp origin main"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias glgm="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --author='edgarben27@gmail.com'"
 
 # Pyenv
 export PYENV_ROOT="\$HOME/.pyenv"
@@ -273,41 +267,38 @@ eval "\$(pyenv init -)"
 # Cargo
 export CARGO_ROOT="\$HOME/.cargo"
 [[ -d \$CARGO_ROOT/bin ]] && export PATH="\$CARGO_ROOT/bin:\$PATH"
-
-# Fnm
-eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"
 EOL
 
-echo "✅ ZSH configuration file edited"
+echo -e "✅ ZSH configuration file edited\n"
 
-echo "☕️ Installing fnm..."
+echo -e "☕️ Installing fnm...\n"
 curl -fsSL https://fnm.vercel.app/install | bash
-echo "✅ Fnm installed"
+echo -e "✅ Fnm installed"
 
-echo "☕️ Reloading ZSH shell..."
+echo -e "☕️ Reloading ZSH shell...\n"
 source ~/.zshrc
-echo "✅ ZSH shell reloaded"
+echo -e "✅ ZSH shell reloaded\n"
 
-echo "☕️ Installing python..."
+echo -e "☕️ Installing python...\n"
 pyenv install 3
 pyenv global 3
-echo "✅ Python versions installed"
+echo -e "✅ Python versions installed\n"
 
-echo "☕️ Installing setuptools..."
+echo -e "☕️ Installing setuptools...\n"
 pip install --upgrade pip
 python -m pip install setuptools
-echo "✅ Setuptools installed"
+echo -e "✅ Setuptools installed\n"
 
-echo "☕️ Installing Node.js LTS..."
+echo -e "☕️ Installing Node.js LTS...\n"
 fnm install --lts
 if [[ "$os_type" == "Linux" ]]; then
-    NODE_LTS_VERSION=$(fnm ls | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+    NODE_LTS_VERSION=$(fnm ls | grep 'lts-latest' | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
     fnm default "$NODE_LTS_VERSION"
 elif [[ "$os_type" == "Darwin" ]]; then
-    NODE_LTS_VERSION=$(fnm ls | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+    NODE_LTS_VERSION=$(fnm ls | grep 'lts-latest' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
     fnm default "$NODE_LTS_VERSION"
 fi
-echo "✅ Node.js $NODE_LTS_VERSION installed and set as default"
+echo -e "✅ Node.js $NODE_LTS_VERSION installed and set as default\n"
 
 ZSHRC_FILE=~/.zshrc
 
@@ -327,6 +318,6 @@ fi
 
 cd ~
 
-echo "🎉 Environment setup completed!"
+echo -e "🎉 \e[32mEnvironment setup completed!\e[0m\n"
 
 exec "$SHELL"
