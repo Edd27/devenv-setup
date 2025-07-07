@@ -92,7 +92,7 @@ if [[ "$generate_ssh" == "yes" ]]; then
     cd ~/.ssh || exit
 
     echo -e "☕️ Generating ssh key for GitHub...\n"
-    read -p "Enter SSH Key name (press Enter to use default: GitHub): " ssh_key_name
+    read -p "Enter SSH Key name (press Enter to use default: github_personal): " ssh_key_name
     ssh_key_name=${ssh_key_name:-github_personal}
     read -p "Enter your GitHub email: " github_email
     github_email=${github_email:-me@example.com}
