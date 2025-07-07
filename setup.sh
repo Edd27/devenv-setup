@@ -318,6 +318,6 @@ fi
 
 cd ~
 
-echo -e "🎉 \e[32mEnvironment setup completed!\e[0m\n"
+echo -e "🎉 Environment setup completed!"
 
 exec "$SHELL"
