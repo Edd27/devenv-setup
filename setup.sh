@@ -97,7 +97,7 @@ if [[ "$generate_ssh" == "yes" ]]; then
     read -p "Enter your GitHub email: " github_email
     github_email=${github_email:-me@example.com}
     ssh_key_complete_name="id_rsa_$ssh_key_name"
-    ssh-keygen -t ed25519 -b 4096 -C "$github_email" -f "$ssh_key_complete_name" -N ""
+    ssh-keygen -t rsa -b 4096 -C "$github_email" -f "$ssh_key_complete_name" -N ""
     eval "$(ssh-agent -s)"
     ssh-add "$ssh_key_complete_name"
 
