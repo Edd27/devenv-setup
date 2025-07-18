@@ -64,25 +64,13 @@ This section lists the prerequisites to run the setup scripts.
 
 ### Installation
 
-1. Clone the repository
+1. Run the following commands to clone the repository and run the setup script:
   ```sh
   sudo apt update && \
   sudo apt install git -y && \
-  git clone https://github.com/Edd27/devenv-setup.git
-  ```
-
-2. Change to the cloned directory
-  ```sh
-  cd devenv-setup
-  ```
-
-3. Make the setup script executable
-  ```sh
-  chmod +x setup.sh
-  ```
-
-4. Run the setup script
-  ```sh
+  git clone https://github.com/Edd27/devenv-setup.git && \
+  cd devenv-setup && \
+  sudo chmod +x setup.sh && \
   ./setup.sh
   ```
 
