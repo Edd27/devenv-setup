@@ -7,101 +7,79 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">DEV ENV AUTOMATE</h3>
+<h3 align="center">DEVENV</h3>
 
   <p align="center">
-    Scripts de configuracion automatizada para mi entorno de desarrollo como Ingeniero de Software 
+    Script to automate the setup of a development environment on Linux and WSL2
   </p>
 </div>
 
 <!-- TABLE OF CONTENTS -->
 <details>
-  <summary>Tabla de contenido</summary>
+  <summary>Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">Acerca del proyecto</a>
+      <a href="#about-the-project">About</a>
       <ul>
-        <li><a href="#built-with">Desarrollado con</a></li>
+        <li><a href="#built-with">Built with</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Iniciando</a>
+      <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisitos</a></li>
-        <li><a href="#installation">Instalacion</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#contact">Contacto</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
 <!-- ABOUT THE PROJECT -->
 
-## Acerca del proyecto
+## About the project
 
-Aquí existen los scripts para automatizar el proceso de configuración de mi entorno de desarrollo para Windows con WSL2.
+Here you will find scripts to automate the setup process of development environment for Windows with WSL2, Debian and Ubuntu.
 
-### Desarrollado con
+### Built with
 
 [![Bash](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnu-bash&logoColor=white)][Bash-url]
 
-<p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
+<p align="right">(<a href="#readme-top">Back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 
-## Comenzando
+## Getting Started
 
-Aqui esta todo lo necesario para iniciar con la ejecucion de los scripts
+Here is everything you need to start running the setup scripts.
 
-### Prerequisitos
+### Prerequisites
 
-En esta seccion se listan los prerequisitos para poder ejecutar los scripts de configuracion
+This section lists the prerequisites to run the setup scripts.
 
-- Alguno de estos sistemas operativos:
-  - Windows con WSL2
-    ```sh
-    wsl --install Debian
-    ```
-  - Linux (Ubuntu o Debian)
-  - macOS Catalina o posterior
+- One of the following operating systems:
+  - Windows / WSL2
+  - Debian
+  - Ubuntu
 
-- ZSH como shell por defecto (Solor para Ubuntu, Debian o instancia de WSL2)
-  1. Instalar ZSH
-    ```sh
-    sudo apt update; \
-    sudo apt upgrade -y; \
-    sudo apt install zsh; \
-      zsh --version; \
-      chsh -s $(which zsh)
-    ```
-  2. Recargar la terminal.
+### Installation
 
-### Instalacion
+1. Open the terminal and run the following command
+  ```sh
+  bash -i <(curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
+  ```
 
-1. Abre la terminal y ejecuta el siguiente comando
-  - Linux
-    ```sh
-    sudo apt update; \
-    sudo apt upgrade -y; \
-    sudo apt install -y curl; \
-    bash -i <(curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
-    ```
-  - macOS
-    ```sh
-    bash -i <(curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
-    ```
-
-<p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
+<p align="right">(<a href="#readme-top">Back to top</a>)</p>
 
 <!-- CONTACT -->
 
-## Contacto
+## Contact
 
 Edgar Benavides - [@EddDevJs](https://x.com/EddDevJs) - contacto@edgarbenavides.dev
 
-Enlace del proyecto: [https://github.com/Edd27/devenv-setup](https://github.com/Edd27/devenv-setup)
+Project link: [https://github.com/Edd27/devenv-setup](https://github.com/Edd27/devenv-setup)
 
-<p align="right">(<a href="#readme-top">Ir a inicio</a>)</p>
+<p align="right">(<a href="#readme-top">Back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
