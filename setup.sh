@@ -289,7 +289,7 @@ install_jetbrains_mono_fonts() {
     mkdir -p "$font_dir"
 
     local installed_fonts
-    installed_fonts=$(fc-list | grep -i "jetbrains")
+    installed_fonts=$(fc-list | grep -i "jetbrains" || true)
 
     local nerd_installed=false
     local normal_installed=false
@@ -353,7 +353,7 @@ install_jetbrains_mono_fonts() {
     progress "Verifying font installation..."
     
     local final_fonts_check
-    final_fonts_check=$(fc-list | grep -i "jetbrains")
+    final_fonts_check=$(fc-list | grep -i "jetbrains" || true)
     
     local final_nerd_check=false
     local final_normal_check=false
