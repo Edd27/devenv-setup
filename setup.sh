@@ -275,27 +275,27 @@ install_jetbrains_mono_fonts() {
     local font_dir="$HOME/.local/share/fonts"
     local temp_dir="/tmp/jetbrains_mono_fonts"
     local nerd_font_url="https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip"
-    local normal_font_url="https://github.com/JetBrains/JetBrainsMono/releases/latest/download/JetBrainsMono.zip"
-
+    local normal_font_url="https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip"
+    
     mkdir -p "$font_dir"
     mkdir -p "$temp_dir"
-
+    
     local nerd_installed=false
     local normal_installed=false
-
+    
     if fc-list | grep -qi "JetBrainsMono Nerd Font"; then
         nerd_installed=true
     fi
-
+    
     if fc-list | grep -qi "JetBrains Mono" && ! fc-list | grep -qi "JetBrainsMono Nerd Font"; then
         normal_installed=true
     fi
-
+    
     if [[ "$nerd_installed" == true && "$normal_installed" == true ]]; then
         success "JetBrains Mono fonts already installed (Normal + Nerd Font)"
         return 0
     fi
-
+    
     if [[ "$nerd_installed" == false ]]; then
         progress "Downloading JetBrains Mono Nerd Font..."
         if curl -fsSL "$nerd_font_url" -o "$temp_dir/JetBrainsMonoNerd.zip" &>>"$LOG_FILE"; then
@@ -321,7 +321,7 @@ install_jetbrains_mono_fonts() {
     else
         info "JetBrains Mono Nerd Font already installed, skipping..."
     fi
-
+    
     if [[ "$normal_installed" == false ]]; then
         progress "Downloading JetBrains Mono Normal Font..."
         if curl -fsSL "$normal_font_url" -o "$temp_dir/JetBrainsMonoNormal.zip" &>>"$LOG_FILE"; then
@@ -339,7 +339,7 @@ install_jetbrains_mono_fonts() {
         fi
         
         progress "Installing Normal Font files..."
-        if find "$temp_dir/normal" -path "*/fonts/ttf/*.ttf" -exec cp {} "$font_dir/" \; &>>"$LOG_FILE"; then
+        if find "$temp_dir/normal" -path "*/fonts/ttf/*.ttf" -o -name "*.ttf" | head -20 | xargs -I {} cp {} "$font_dir/" 2>>"$LOG_FILE"; then
             success "Normal Font files copied to $font_dir"
         else
             error "Failed to copy Normal Font files"
@@ -356,7 +356,7 @@ install_jetbrains_mono_fonts() {
     fi
     
     rm -rf "$temp_dir"
-
+    
     local final_nerd_check=false
     local final_normal_check=false
     
