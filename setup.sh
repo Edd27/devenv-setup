@@ -278,6 +278,8 @@ install_jetbrains_mono_fonts() {
     local normal_font_url="https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip"
     
     mkdir -p "$font_dir"
+    
+    rm -rf "$temp_dir"
     mkdir -p "$temp_dir"
     
     local nerd_installed=false
@@ -306,7 +308,7 @@ install_jetbrains_mono_fonts() {
         
         progress "Extracting Nerd Font files..."
         mkdir -p "$temp_dir/nerd"
-        if unzip -q "$temp_dir/JetBrainsMonoNerd.zip" -d "$temp_dir/nerd" &>>"$LOG_FILE"; then
+        if unzip -o -q "$temp_dir/JetBrainsMonoNerd.zip" -d "$temp_dir/nerd" &>>"$LOG_FILE"; then
             success "Nerd Font files extracted"
         else
             error "Failed to extract Nerd Font files"
@@ -332,7 +334,7 @@ install_jetbrains_mono_fonts() {
         
         progress "Extracting Normal Font files..."
         mkdir -p "$temp_dir/normal"
-        if unzip -q "$temp_dir/JetBrainsMonoNormal.zip" -d "$temp_dir/normal" &>>"$LOG_FILE"; then
+        if unzip -o -q "$temp_dir/JetBrainsMonoNormal.zip" -d "$temp_dir/normal" &>>"$LOG_FILE"; then
             success "Normal Font files extracted"
         else
             error "Failed to extract Normal Font files"
