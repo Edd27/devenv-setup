@@ -66,8 +66,8 @@ This section lists the prerequisites to run the setup scripts.
 
 1. Open the terminal and run the following command
   ```sh
-  sudo apt install -y curl; \
-    bash -i <(curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
+  sudo apt update && sudo apt upgrade -y && sudo apt install curl -y && \
+  bash -i <(curl -sSL https://raw.githubusercontent.com/Edd27/devenv-setup/main/setup.sh)
   ```
 
 <p align="right">(<a href="#readme-top">Back to top</a>)</p>
