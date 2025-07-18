@@ -266,12 +266,25 @@ install_essentials() {
 }
 
 #-------------------------------#
-#    JETBRAINS MONO FONTS       #
+#   JETBRAINS MONO FONTS        #
 #-------------------------------#
 
 install_jetbrains_mono_fonts() {
     progress "Installing JetBrains Mono Fonts (Normal + Nerd Font)..."
     
+    info "Checking for fontconfig tools..."
+    if ! check_command fc-list; then
+        warning "The 'fc-list' command is not available. Skipping font installation."
+        warning "Please ensure the 'fontconfig' package is installed correctly."
+        return 1
+    fi
+
+    progress "Building font cache to avoid hangs..."
+    if ! fc-cache -f -v &>>"$LOG_FILE"; then
+        warning "Could not build font cache. Font installation might fail."
+    fi
+    success "Font cache is ready."
+
     local font_dir="$HOME/.local/share/fonts"
     mkdir -p "$font_dir"
 
@@ -328,8 +341,8 @@ install_jetbrains_mono_fonts() {
         info "JetBrains Mono Normal Font already installed, skipping..."
     fi
 
-    progress "Updating font cache..."
-    if fc-cache -fv &>>"$LOG_FILE"; then
+    progress "Updating font cache post-installation..."
+    if fc-cache -f -v &>>"$LOG_FILE"; then
         success "Font cache updated"
     else
         warning "Failed to update font cache"
@@ -354,7 +367,6 @@ install_jetbrains_mono_fonts() {
 
     if [[ "$final_nerd_check" == true && "$final_normal_check" == true ]]; then
         success "JetBrains Mono fonts verified successfully"
-        info "Please set your terminal font to 'JetBrainsMono Nerd Font' or similar."
     else
         warning "Font installation may be incomplete."
     fi
