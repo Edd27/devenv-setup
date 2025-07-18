@@ -359,14 +359,19 @@ install_jetbrains_mono_fonts() {
     
     rm -rf "$temp_dir"
     
+    progress "Verifying font installation..."
+    
+    info "Debug: Checking installed JetBrains fonts..."
+    fc-list | grep -i "jetbrains" | head -10 >> "$LOG_FILE"
+    
     local final_nerd_check=false
     local final_normal_check=false
     
-    if fc-list | grep -qi "JetBrainsMono Nerd Font"; then
+    if fc-list | grep -i "jetbrains" | grep -i "nerd"; then
         final_nerd_check=true
     fi
     
-    if fc-list | grep -qi "JetBrains Mono"; then
+    if fc-list | grep -i "jetbrains" | grep -v -i "nerd"; then
         final_normal_check=true
     fi
     
@@ -374,23 +379,30 @@ install_jetbrains_mono_fonts() {
         success "JetBrains Mono fonts installed successfully"
         info "Installed fonts:"
         info "  • JetBrains Mono (Normal) - For general system use"
-        info "  • JetBrainsMono Nerd Font - For terminal with icons"
+        info "  • JetBrains Mono Nerd Font - For terminal with icons"
         info ""
         info "Usage:"
-        info "  • Terminal: Set font to 'JetBrainsMono Nerd Font'"
-        info "  • IDE/Editor: Set font to 'JetBrains Mono'"
+        info "  • Terminal: Look for 'JetBrains' or 'JetBrainsMono' with 'Nerd' in the name"
+        info "  • IDE/Editor: Look for 'JetBrains Mono' in font selection"
+        info ""
+        info "Available fonts:"
+        fc-list | grep -i "jetbrains" | cut -d: -f2 | sort -u | head -5
     else
         warning "Font installation may be incomplete"
+        info "Debug information:"
         if [[ "$final_nerd_check" == true ]]; then
-            info "✓ JetBrains Mono Nerd Font available"
+            info "✓ JetBrains Mono Nerd Font variants found"
         else
-            warning "✗ JetBrains Mono Nerd Font not detected"
+            warning "✗ JetBrains Mono Nerd Font variants not detected"
         fi
         if [[ "$final_normal_check" == true ]]; then
-            info "✓ JetBrains Mono Normal Font available"
+            info "✓ JetBrains Mono Normal Font variants found"
         else
-            warning "✗ JetBrains Mono Normal Font not detected"
+            warning "✗ JetBrains Mono Normal Font variants not detected"
         fi
+        info ""
+        info "All JetBrains fonts found:"
+        fc-list | grep -i "jetbrains" | cut -d: -f2 | sort -u
     fi
 }
 
