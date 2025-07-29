@@ -266,121 +266,6 @@ install_essentials() {
 }
 
 #-------------------------------#
-#   JETBRAINS MONO FONTS        #
-#-------------------------------#
-
-install_jetbrains_mono_fonts() {
-    progress "Installing JetBrains Mono Fonts (Normal + Nerd Font)..."
-    
-    info "Checking for fontconfig tools..."
-    if ! check_command fc-list; then
-        warning "The 'fc-list' command is not available. Skipping font installation."
-        warning "Please ensure the 'fontconfig' package is installed correctly."
-        return 1
-    fi
-
-    progress "Building font cache to avoid hangs..."
-    if ! fc-cache -f -v &>>"$LOG_FILE"; then
-        warning "Could not build font cache. Font installation might fail."
-    fi
-    success "Font cache is ready."
-
-    local font_dir="$HOME/.local/share/fonts"
-    mkdir -p "$font_dir"
-
-    local installed_fonts
-    installed_fonts=$(fc-list | grep -i "jetbrains" || true)
-
-    local nerd_installed=false
-    local normal_installed=false
-    
-    if echo "$installed_fonts" | grep -qi "nerd"; then
-        nerd_installed=true
-    fi
-    
-    if echo "$installed_fonts" | grep -v -qi "nerd"; then
-        normal_installed=true
-    fi
-
-    if [[ "$nerd_installed" == true && "$normal_installed" == true ]]; then
-        success "JetBrains Mono fonts already installed (Normal + Nerd Font)"
-        return 0
-    fi
-
-    local temp_dir="/tmp/jetbrains_mono_fonts"
-    rm -rf "$temp_dir"
-    mkdir -p "$temp_dir"
-    
-    if [[ "$nerd_installed" == false ]]; then
-        progress "Downloading JetBrains Mono Nerd Font..."
-        if curl -fsSL "https://github.com/ryanoasis/nerd-fonts/releases/latest/download/JetBrainsMono.zip" -o "$temp_dir/JetBrainsMonoNerd.zip" &>>"$LOG_FILE"; then
-            success "Nerd Font downloaded successfully"
-            progress "Extracting and installing Nerd Font files..."
-            unzip -o -q "$temp_dir/JetBrainsMonoNerd.zip" -d "$temp_dir/nerd" &>>"$LOG_FILE"
-            find "$temp_dir/nerd" -name "*.ttf" -exec cp {} "$font_dir/" \; &>>"$LOG_FILE"
-            success "Nerd Font installed"
-        else
-            error "Failed to download JetBrains Mono Nerd Font"
-        fi
-    else
-        info "JetBrains Mono Nerd Font already installed, skipping..."
-    fi
-
-    if [[ "$normal_installed" == false ]]; then
-        progress "Downloading JetBrains Mono Normal Font..."
-        if curl -fsSL "https://github.com/JetBrains/JetBrainsMono/releases/download/v2.304/JetBrainsMono-2.304.zip" -o "$temp_dir/JetBrainsMonoNormal.zip" &>>"$LOG_FILE"; then
-            success "Normal Font downloaded successfully"
-            progress "Extracting and installing Normal Font files..."
-            unzip -o -q "$temp_dir/JetBrainsMonoNormal.zip" -d "$temp_dir/normal" &>>"$LOG_FILE"
-            find "$temp_dir/normal/fonts/ttf" -name "*.ttf" -exec cp {} "$font_dir/" \; &>>"$LOG_FILE"
-            success "Normal Font installed"
-        else
-            error "Failed to download JetBrains Mono Normal Font"
-        fi
-    else
-        info "JetBrains Mono Normal Font already installed, skipping..."
-    fi
-
-    progress "Updating font cache post-installation..."
-    if fc-cache -f -v &>>"$LOG_FILE"; then
-        success "Font cache updated"
-    else
-        warning "Failed to update font cache"
-    fi
-    
-    rm -rf "$temp_dir"
-    
-    progress "Verifying font installation..."
-    
-    local final_fonts_check
-    final_fonts_check=$(fc-list | grep -i "jetbrains" || true)
-    
-    local final_nerd_check=false
-    local final_normal_check=false
-
-    if echo "$final_fonts_check" | grep -qi "nerd"; then
-        final_nerd_check=true
-    fi
-    if echo "$final_fonts_check" | grep -v -qi "nerd"; then
-        final_normal_check=true
-    fi
-
-    if [[ "$final_nerd_check" == true && "$final_normal_check" == true ]]; then
-        success "JetBrains Mono fonts verified successfully"
-    else
-        warning "Font installation may be incomplete."
-    fi
-
-    info "Detected JetBrains font families:"
-    local font_families
-    font_families=$(echo "$final_fonts_check" | cut -d: -f2 | cut -d, -f1 | sort -u | head -8)
-    
-    while IFS= read -r line; do
-        info "  • $line"
-    done <<< "$font_families"
-}
-
-#-------------------------------#
 #    DEV TOOLS INSTALLATION     #
 #-------------------------------#
 
@@ -772,7 +657,6 @@ main() {
     get_user_info
     setup_locale
     install_essentials
-    install_jetbrains_mono_fonts
     install_dev_tools
     setup_oh_my_zsh
     create_zshrc
@@ -784,11 +668,10 @@ main() {
     success "🎉 Environment for development setup completed!"
     info "📝 Configuration summary:"
     info "   • Locale: en_US.UTF-8"
-    info "   • Font: JetBrains Mono Nerd Font"
     info "   • Shell: ZSH with Oh My Zsh"
     info "   • Python: $PYTHON_VERSION (via pyenv)"
     info "   • Node.js: LTS (via fnm)"
-    info "🔄 Please restart your terminal (on WSL) or your session (on Linux Distro) to apply changes"
+    info "🔄 Please restart your terminal (on WSL) or your session (on Linux) to apply changes"
     info "🖥️ To use the Nerd Font, set your terminal font to 'JetBrainsMono Nerd Font'"
     info "📄 Log file saved at: $LOG_FILE"
 }
