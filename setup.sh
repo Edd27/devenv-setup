@@ -663,7 +663,6 @@ main() {
     info "   • Python: $PYTHON_VERSION (via pyenv)"
     info "   • Node.js: LTS (via fnm)"
     info "🔄 Please restart your terminal (on WSL) or your session (on Linux) to apply changes"
-    info "🖥️ To use the Nerd Font, set your terminal font to 'JetBrainsMono Nerd Font'"
     info "📄 Log file saved at: $LOG_FILE"
 }
 
