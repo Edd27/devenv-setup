@@ -342,18 +342,9 @@ parse_git_branch() {
   echo "on $branch"
 }
 
-# Custom prompt colors
-COLOR_BLUE=$'%F{blue}'
-COLOR_GRAY=$'%F{245}'
-COLOR_MAGENTA=$'%F{magenta}'
-COLOR_GREEN=$'%F{green}'
-COLOR_YELLOW=$'%F{yellow}'
-COLOR_RED=$'%F{red}'
-COLOR_DEFAULT=$'%f'
-
 # Custom prompt
-export PROMPT='${COLOR_YELLOW}[${COLOR_RED}%n${COLOR_GRAY}＠${COLOR_BLUE}%m${COLOR_YELLOW}]${COLOR_GRAY}:${COLOR_MAGENTA}%~${COLOR_GREEN} $(parse_git_branch)
-${COLOR_MAGENTA}›${COLOR_DEFAULT} '
+export PROMPT='[%n＠%m]:%~ $(parse_git_branch)
+%# '
 
 # Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
