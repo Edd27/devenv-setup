@@ -337,14 +337,61 @@ create_zshrc() {
     cat > "$ZSHRC_FILE" << 'EOF'
 # Git branch parser
 parse_git_branch() {
-  git rev-parse --is-inside-work-tree &>/dev/null || return
-  local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
-  echo "on $branch"
+    git rev-parse --is-inside-work-tree &>/dev/null || return
+    local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+    echo "%f󰇝 %F{yellow}󰘬 $branch %f"
+}
+
+# Node.js version parser
+print_node_version() {
+    local version=$1
+    echo "%f󰇝 %F{green} v$version %f"
+}
+
+parse_node_version() {
+    local dir="$PWD"
+    while [[ -n $dir && $dir != "/" ]]; do
+        if [[ -f "$dir/.nvmrc" ]]; then
+            local v=$(<"$dir/.nvmrc")
+            v=${v##v}
+            print_node_version "$v"
+            return
+        fi
+        if [[ -f "$dir/.node-version" ]]; then
+            local v=$(<"$dir/.node-version")
+            v=${v##v}
+            print_node_version "$v"
+            return
+        fi
+        if [[ -f "$dir/package.json" ]]; then
+            if command -v jq >/dev/null 2>&1; then
+                local v=$(jq -r '.engines.node // empty' "$dir/package.json")
+                if [[ -n $v ]]; then
+                    print_node_version "$v"
+                    return
+                fi
+            elif command -v node >/dev/null 2>&1; then
+                local v=$(node -e "try{const p=require('./package.json'); console.log((p.engines&&p.engines.node)||'') }catch(e){}" 2>/dev/null)
+                if [[ -n $v ]]; then
+                    print_node_version "$v"
+                    return
+                fi
+            fi
+            if command -v node >/dev/null 2>&1; then
+                local v=$(node -v 2>/dev/null)
+                v=${v##v}
+                print_node_version "$v"
+                return
+            fi
+        fi
+        dir=$(dirname "$dir")
+    done
+    return
 }
 
 # Custom prompt
-export PROMPT='[%n＠%m]:%~ $(parse_git_branch)
-%# '
+export PROMPT='%F{blue}󰍹 %m %f󰇝 %F{magenta} %n %f󰇝 %F{cyan}󰉋 %1~ $(parse_git_branch)$(parse_node_version)
+%f󰅂 %f'
 
 # Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
