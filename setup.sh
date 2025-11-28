@@ -246,7 +246,7 @@ install_essentials() {
     sudo apt upgrade -y &>>"$LOG_FILE" || warning "Some packages failed to upgrade"
 
     local packages=(
-        wget curl git unzip bat fastfetch xclip make build-essential
+        wget curl git unzip bat xclip make build-essential
         libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev
         libncursesw5-dev libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev
         libffi-dev liblzma-dev libgdbm-dev libnss3-dev libexpat1-dev
