@@ -11,7 +11,7 @@ clear
 readonly PYTHON_VERSION="3"
 readonly ZSHRC_FILE="$HOME/.zshrc"
 readonly SCRIPT_NAME="$(basename "$0")"
-readonly GITHUB_SSH_KEY_NAME="id_rsa_github_personal"
+readonly GITHUB_SSH_KEY_NAME="github_personal"
 readonly LOG_FILE="/tmp/devenv_setup_$(date +%Y%m%d_%H%M%S).log"
 
 readonly RED='\033[0;31m'
@@ -574,7 +574,7 @@ setup_ssh() {
     local ssh_key_path="$HOME/.ssh/$GITHUB_SSH_KEY_NAME"
 
     if [[ ! -f "$ssh_key_path" ]]; then
-        if ssh-keygen -t rsa -b 4096 -C "$user_email" -f "$ssh_key_path" -N "" &>>"$LOG_FILE"; then
+        if ssh-keygen -t ed25519 -C "$user_email" -f "$ssh_key_path" -N "" &>>"$LOG_FILE"; then
             success "SSH key generated"
         else
             error "Failed to generate SSH key"
