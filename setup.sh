@@ -345,7 +345,7 @@ parse_git_branch() {
 # Node.js version parser
 print_node_version() {
     local version=$1
-    echo "%f󰇝 %F{green} v$version %f"
+    echo "%f󰇝 %F{green}󰎙 v$version %f"
 }
 
 parse_node_version() {
@@ -390,7 +390,7 @@ parse_node_version() {
 }
 
 # Custom prompt
-export PROMPT='%F{blue}󰍹 %m %f󰇝 %F{magenta} %n %f󰇝 %F{cyan}󰉋 %1~ $(parse_git_branch)$(parse_node_version)
+export PROMPT='%F{magenta} %n %f󰇝 %F{blue}󰍹 %m %f󰇝 %F{cyan}󰉋 %1~ $(parse_git_branch)$(parse_node_version)
 %f󰅂 %f'
 
 # Oh My Zsh configuration
