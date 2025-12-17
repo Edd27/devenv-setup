@@ -339,13 +339,13 @@ create_zshrc() {
 parse_git_branch() {
     git rev-parse --is-inside-work-tree &>/dev/null || return
     local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
-    echo "%f󰇝 %F{yellow}󰘬 $branch %f"
+    echo "$branch %f"
 }
 
 # Node.js version parser
 print_node_version() {
     local version=$1
-    echo "%f󰇝 %F{green}󰎙 v$version %f"
+    echo "via Node.js v$version %f"
 }
 
 parse_node_version() {
@@ -390,8 +390,7 @@ parse_node_version() {
 }
 
 # Custom prompt
-export PROMPT='%F{magenta} %n %f󰇝 %F{blue}󰍹 %m %f󰇝 %F{cyan}󰉋 %1~ $(parse_git_branch)$(parse_node_version)
-%f󰅂 %f'
+export PROMPT='%n@%m %1~ $(parse_git_branch)$(parse_node_version) % '
 
 # Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
