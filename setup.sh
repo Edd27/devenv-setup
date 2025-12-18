@@ -389,7 +389,7 @@ parse_node_version() {
 }
 
 # Custom prompt
-export PROMPT='%n@%m %1~ $(parse_git_branch)$(parse_node_version) % '
+export PROMPT='%n@%m %1~ $(parse_git_branch)$(parse_node_version)%# '
 
 # Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
