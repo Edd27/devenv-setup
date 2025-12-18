@@ -145,7 +145,6 @@ setup_zsh() {
         warning "ZSH is not the current shell. Switching..."
         
         if ! check_command zsh; then
-            progress "Installing ZSH..."
             sudo apt update &>>"$LOG_FILE" || error "Failed to update package list"
             install_package zsh
         else
