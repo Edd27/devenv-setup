@@ -301,6 +301,7 @@ install_dev_tools() {
                 success "php-build installed"
             else
                 warning "Failed to install php-build"
+            fi
         else
             warning "Failed to install phpenv"
         fi
@@ -729,6 +730,7 @@ cleanup() {
         success "Cleaned up"
     else
         warning "Failed to cleaning up"
+    fi
 }
 
 #-------------------------------#
