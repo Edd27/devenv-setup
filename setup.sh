@@ -68,6 +68,16 @@ install_package() {
     fi
 }
 
+uninstall_package() {
+    local package="$1"
+    progress "Uninstalling $package..."
+    if sudo apt purge -y "$package" &>>"$LOG_FILE"; then
+        success "$package uninstalled"
+    else
+        error "Failed to uninstall $package"
+    fi
+}
+
 clone_zsh_plugin() {
     local plugin_name="$1"
     local plugin_repo="$2"
@@ -251,7 +261,7 @@ install_essentials() {
         libncursesw5-dev libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev
         libffi-dev liblzma-dev libgdbm-dev libnss3-dev libexpat1-dev
         fontconfig locales pkg-config gcc g++ libclang-dev libcurl4-openssl-dev
-        libjpeg-dev libicu-dev
+        libjpeg-dev libicu-dev lazygit fzf ripgrep fd-find
     )
 
     for package in "${packages[@]}"; do
@@ -473,7 +483,7 @@ EOF
 #  PYTHON, NODE AND PHP SETUP   #
 #-------------------------------#
 
-setup_python_node() {
+setup_python_node_php() {
     progress "Setting up Python $PYTHON_VERSION..."
     
     export PYENV_ROOT="$HOME/.pyenv"
@@ -720,6 +730,32 @@ EOF
 }
 
 #-------------------------------#
+#         LAZYVIM SETUP         #
+#-------------------------------#
+
+setup_lazyvim() {
+    progress "Setting up Lazyvim..."
+
+    if check_command cargo; then
+        cargo install --locked tree-sitter-cli
+        if check_command nvim; then
+            uninstall_package neovim
+        fi
+        if curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz &>>"$LOG_FILE"; then
+            sudo rm -rf /opt/nvim-linux-x86_64
+            sudo rm -rf /opt/nvim
+            sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+            sudo mv /opt/nvim-linux-x86_64 /opt/nvim
+            if git clone https://github.com/LazyVim/starter ~/.config/nvim &>>"$LOG_FILE"; then
+                rm -rf ~/.config/nvim/.git
+            fi
+        fi
+    else
+     warning "Failed to install lazyvim. Needs Rust (cargo) but is not installed"
+    fi
+}
+
+#-------------------------------#
 #            CLEANUP            #
 #-------------------------------#
 
@@ -747,10 +783,11 @@ main() {
     install_dev_tools
     setup_oh_my_zsh
     create_zshrc
-    setup_python_node
+    setup_python_node_php
     verify_git_installation
     setup_ssh
     configure_git
+    setup_lazyvim
     cleanup
 
     success "🎉 Environment for development setup completed!"
