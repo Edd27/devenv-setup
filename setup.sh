@@ -9,6 +9,7 @@ clear
 #-------------------------------#
 
 readonly PYTHON_VERSION="3"
+readonly PHP_VERSION="8.5.1"
 readonly ZSHRC_FILE="$HOME/.zshrc"
 readonly SCRIPT_NAME="$(basename "$0")"
 readonly GITHUB_SSH_KEY_NAME="github_personal"
@@ -249,7 +250,8 @@ install_essentials() {
         libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev
         libncursesw5-dev libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev
         libffi-dev liblzma-dev libgdbm-dev libnss3-dev libexpat1-dev
-        fontconfig locales pkg-config gcc g++
+        fontconfig locales pkg-config gcc g++ libclang-dev libcurl4-openssl-dev
+        libjpeg-dev libicu-dev
     )
 
     for package in "${packages[@]}"; do
@@ -273,23 +275,47 @@ install_dev_tools() {
 
     if [[ ! -d "$HOME/.pyenv" ]]; then
         if curl -fsSL https://pyenv.run | bash &>>"$LOG_FILE"; then
-            success "Pyenv installed"
+            success "pyenv installed"
         else
-            warning "Failed to install Pyenv"
+            warning "Failed to install pyenv"
         fi
     else
-        success "Pyenv already installed"
+        success "pyenv already installed"
     fi
     
     if [[ ! -d "$HOME/.fnm" ]]; then
         if curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.fnm" --skip-shell &>>"$LOG_FILE"; then
             sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|' "$ZSHRC_FILE"
-            success "FNM installed"
+            success "fnm installed"
         else
-            warning "Failed to install FNM"
+            warning "Failed to install fnm"
         fi
     else
-        success "FNM already installed"
+        success "fnm already installed"
+    fi
+
+    if [[ ! -d "$HOME/.phpenv" ]]; then
+        if git clone https://github.com/phpenv/phpenv.git ~/.phpenv &>>"$LOG_FILE"; then
+            success "phpenv installed"
+            if git clone https://github.com/php-build/php-build ~/.phpenv/plugins/php-build &>>"$LOG_FILE"; then
+                success "php-build installed"
+            else
+                warning "Failed to install php-build"
+        else
+            warning "Failed to install phpenv"
+        fi
+    else
+        success "phpenv already installed"
+    fi
+
+    if [[ ! -d "$HOME/.rustup" ]]; then
+        if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh &>>"$LOG_FILE"; then
+            success "rust installed"
+        else
+            warning "Failed to install rust"
+        fi
+    else
+        success "rust already installed"
     fi
 }
 
@@ -334,19 +360,15 @@ create_zshrc() {
     progress "Creating ZSH configuration..."
 
     cat > "$ZSHRC_FILE" << 'EOF'
-# Git branch parser
 parse_git_branch() {
     git rev-parse --is-inside-work-tree &>/dev/null || return
     local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
     echo "$branch %f"
 }
-
-# Node.js version parser
 print_node_version() {
     local version=$1
     echo "via Node.js v$version %f"
 }
-
 parse_node_version() {
     local dir="$PWD"
     while [[ -n $dir && $dir != "/" ]]; do
@@ -387,36 +409,19 @@ parse_node_version() {
     done
     return
 }
-
-# Custom prompt
 export PROMPT='%n@%m %1~ $(parse_git_branch)$(parse_node_version)%# '
-
-# Oh My Zsh configuration
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
-
-# Load Oh My Zsh
 source "$ZSH/oh-my-zsh.sh"
-
-# Shell options
 setopt auto_cd
 setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt inc_append_history
 setopt share_history
-
-# Enhanced cd with auto ls
 cd() { 
     builtin cd "$@" && ls -la --color=auto
 }
-
-# Auto ls on directory change
-chpwd() { 
-    ls -la --color=auto
-}
-
-# Aliases
 alias ls="ls -la --color=auto"
 alias ll="ls -alF"
 alias la="ls -A"
@@ -432,18 +437,13 @@ alias gcb="git checkout -b"
 alias gaa="git add ."
 alias gcm="git commit -m"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-
-# Locale configuration
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-
-# Development environment setup
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
-
 export FNM_ROOT="$HOME/.fnm"
 if [[ -d $FNM_ROOT ]]; then
     export PATH="$FNM_ROOT:$PATH"
@@ -452,8 +452,13 @@ if [[ -d $FNM_ROOT ]]; then
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
     fi
 fi
-
-# History configuration
+export PHPENV_ROOT="$HOME/.phpenv"
+[[ -d $PHPENV_ROOT/bin ]] && export PATH="$PHPENV_ROOT/bin:$PATH"
+if command -v phpenv 1>/dev/null 2>&1; then
+    eval "$(phpenv init -)"
+fi
+export NVIM_ROOT="/opt/nvim"
+[[ -d $NVIM_ROOT/bin ]] && export PATH="$NVIM_ROOT/bin:$PATH"
 HISTFILE=~/.zsh_history
 HISTFILE=~/.bash_history
 HISTSIZE=10000
@@ -464,7 +469,7 @@ EOF
 }
 
 #-------------------------------#
-#      PYTHON & NODE SETUP      #
+#  PYTHON, NODE AND PHP SETUP   #
 #-------------------------------#
 
 setup_python_node() {
@@ -542,6 +547,37 @@ setup_python_node() {
         fi
     else
         warning "FNM not available for Node.js setup"
+    fi
+
+    progress "Setting up php $PHP_VERSION..."
+    
+    export PHPENV_ROOT="$HOME/.phpenv"
+    export PATH="$PHPENV_ROOT/bin:$PATH"
+    
+    if command -v phpenv &>/dev/null; then
+        eval "$(phpenv init -)"
+        
+        if phpenv versions | grep -q "$PHP_VERSION"; then
+            info "php $PHP_VERSION already installed"
+        else
+            progress "Installing php $PHP_VERSION (this may take a while)..."
+            
+            if [[ -d "$PHPENV_ROOT/versions/$PHP_VERSION" ]]; then
+                rm -rf "$PHPENV_ROOT/versions/$PHP_VERSION"
+            fi
+            
+            if ! phpenv install "$PHP_VERSION" &>>"$LOG_FILE"; then
+                error "Failed to install php $PHP_VERSION. Check $LOG_FILE for details."
+            fi
+        fi
+        
+        if phpenv global "$PHP_VERSION" &>>"$LOG_FILE"; then
+            success "php $PHP_VERSION set as global version"
+        else
+            warning "Failed to set php $PHP_VERSION as global"
+        fi
+    else
+        warning "phpenv not available for php setup"
     fi
 }
 
@@ -683,6 +719,19 @@ EOF
 }
 
 #-------------------------------#
+#            CLEANUP            #
+#-------------------------------#
+
+cleanup() {
+    progress "Cleaning up..."
+    cd ..
+    if rm -rf devenv-setup/; then
+        success "Cleaned up"
+    else
+        warning "Failed to cleaning up"
+}
+
+#-------------------------------#
 #        MAIN FUNCTION          #
 #-------------------------------#
 
@@ -700,6 +749,7 @@ main() {
     verify_git_installation
     setup_ssh
     configure_git
+    cleanup
 
     success "🎉 Environment for development setup completed!"
     info "📝 Configuration summary:"
