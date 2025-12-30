@@ -567,7 +567,6 @@ setup_python_node_php() {
     export PATH="$PHPENV_ROOT/bin:$PATH"
     
     if command -v phpenv &>/dev/null; then
-        eval "$(phpenv init -)"
         
         if phpenv versions | grep -q "$PHP_VERSION"; then
             info "php $PHP_VERSION already installed"
