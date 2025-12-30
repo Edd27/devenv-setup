@@ -577,8 +577,10 @@ setup_python_node_php() {
             if [[ -d "$PHPENV_ROOT/versions/$PHP_VERSION" ]]; then
                 rm -rf "$PHPENV_ROOT/versions/$PHP_VERSION"
             fi
+
+            export PHP_BUILD_SKIP_EXTENSIONS="xdebug"
             
-            if ! PHP_BUILD_SKIP_EXTENSIONS="xdebug" phpenv install "$PHP_VERSION" &>>"$LOG_FILE"; then
+            if ! phpenv install "$PHP_VERSION" &>>"$LOG_FILE"; then
                 error "Failed to install php $PHP_VERSION. Check $LOG_FILE for details."
             fi
         fi
