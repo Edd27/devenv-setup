@@ -261,7 +261,7 @@ install_essentials() {
         libncursesw5-dev libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev
         libffi-dev liblzma-dev libgdbm-dev libnss3-dev libexpat1-dev
         fontconfig locales pkg-config gcc g++ libclang-dev libcurl4-openssl-dev
-        libjpeg-dev libicu-dev lazygit fzf ripgrep fd-find
+        libjpeg-dev libicu-dev lazygit fzf ripgrep fd-find libonig-dev
     )
 
     for package in "${packages[@]}"; do
