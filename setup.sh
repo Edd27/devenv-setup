@@ -395,7 +395,7 @@ parse_node_version() {
     done
     return
 }
-export PROMPT='%F{green}%n@%m%f:%F{blue}%1~ $(parse_git_branch)$(parse_node_version)%f$# '
+export PROMPT='%F{green}%n@%m%f:%F{blue}%1~$(parse_git_branch)$(parse_node_version)%f%(!.#.$) '
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
@@ -438,8 +438,6 @@ if [[ -d $FNM_ROOT ]]; then
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
     fi
 fi
-export NVIM_ROOT="/opt/nvim"
-[[ -d $NVIM_ROOT/bin ]] && export PATH="$NVIM_ROOT/bin:$PATH"
 HISTFILE=~/.zsh_history
 HISTFILE=~/.bash_history
 HISTSIZE=10000
