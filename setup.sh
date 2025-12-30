@@ -474,6 +474,7 @@ HISTFILE=~/.zsh_history
 HISTFILE=~/.bash_history
 HISTSIZE=10000
 SAVEHIST=10000
+export BAT_THEME="TwoDark"
 EOF
 
     success "ZSH configuration created"
