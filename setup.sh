@@ -303,16 +303,6 @@ install_dev_tools() {
     else
         success "fnm already installed"
     fi
-
-    if [[ ! -d "$HOME/.rustup" ]]; then
-        if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &>>"$LOG_FILE"; then
-            success "rust installed"
-        else
-            warning "Failed to install rust"
-        fi
-    else
-        success "rust already installed"
-    fi
 }
 
 #-------------------------------#
@@ -678,32 +668,6 @@ EOF
 }
 
 #-------------------------------#
-#         LAZYVIM SETUP         #
-#-------------------------------#
-
-setup_lazyvim() {
-    progress "Setting up Lazyvim..."
-
-    if check_command cargo; then
-        cargo install --locked tree-sitter-cli
-        if check_command nvim; then
-            uninstall_package neovim
-        fi
-        if curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz &>>"$LOG_FILE"; then
-            sudo rm -rf /opt/nvim-linux-x86_64
-            sudo rm -rf /opt/nvim
-            sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-            sudo mv /opt/nvim-linux-x86_64 /opt/nvim
-            if git clone https://github.com/LazyVim/starter ~/.config/nvim &>>"$LOG_FILE"; then
-                rm -rf ~/.config/nvim/.git
-            fi
-        fi
-    else
-     warning "Failed to install lazyvim. Needs Rust (cargo) but is not installed"
-    fi
-}
-
-#-------------------------------#
 #            CLEANUP            #
 #-------------------------------#
 
@@ -735,7 +699,6 @@ main() {
     verify_git_installation
     setup_ssh
     configure_git
-    setup_lazyvim
     cleanup
 
     success "🎉 Environment for development setup completed!"
