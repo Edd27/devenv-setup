@@ -305,7 +305,7 @@ install_dev_tools() {
     fi
 
     if [[ ! -d "$HOME/.rustup" ]]; then
-        if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh &>>"$LOG_FILE"; then
+        if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y &>>"$LOG_FILE"; then
             success "rust installed"
         else
             warning "Failed to install rust"
