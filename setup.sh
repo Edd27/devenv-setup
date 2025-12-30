@@ -395,7 +395,7 @@ parse_node_version() {
     done
     return
 }
-export PROMPT='%F{green}%n@%m%f:%F{blue}%1~$(parse_git_branch)$(parse_node_version)%f%(!.#.$) '
+export PROMPT='%F{green}%n@%m%f:%F{blue}%1~ $(parse_git_branch)$(parse_node_version)%f%(!.#.$) '
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
