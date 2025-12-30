@@ -9,7 +9,7 @@ clear
 #-------------------------------#
 
 readonly PYTHON_VERSION="3"
-readonly PHP_VERSION="8.5.1"
+readonly PHP_VERSION="8.4.3"
 readonly ZSHRC_FILE="$HOME/.zshrc"
 readonly SCRIPT_NAME="$(basename "$0")"
 readonly GITHUB_SSH_KEY_NAME="github_personal"
