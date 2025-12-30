@@ -579,6 +579,7 @@ setup_python_node_php() {
             fi
 
             export PHP_BUILD_SKIP_EXTENSIONS="xdebug"
+            export PHP_BUILD_CONFIGURE_OPTS="--disable-xdebug"
             
             if ! phpenv install "$PHP_VERSION" &>>"$LOG_FILE"; then
                 error "Failed to install php $PHP_VERSION. Check $LOG_FILE for details."
