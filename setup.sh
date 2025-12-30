@@ -9,7 +9,6 @@ clear
 #-------------------------------#
 
 readonly PYTHON_VERSION="3"
-readonly PHP_VERSION="8.4.3"
 readonly ZSHRC_FILE="$HOME/.zshrc"
 readonly SCRIPT_NAME="$(basename "$0")"
 readonly GITHUB_SSH_KEY_NAME="github_personal"
@@ -305,21 +304,6 @@ install_dev_tools() {
         success "fnm already installed"
     fi
 
-    if [[ ! -d "$HOME/.phpenv" ]]; then
-        if git clone https://github.com/phpenv/phpenv.git ~/.phpenv &>>"$LOG_FILE"; then
-            success "phpenv installed"
-            if git clone https://github.com/php-build/php-build ~/.phpenv/plugins/php-build &>>"$LOG_FILE"; then
-                success "php-build installed"
-            else
-                warning "Failed to install php-build"
-            fi
-        else
-            warning "Failed to install phpenv"
-        fi
-    else
-        success "phpenv already installed"
-    fi
-
     if [[ ! -d "$HOME/.rustup" ]]; then
         if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh &>>"$LOG_FILE"; then
             success "rust installed"
@@ -464,11 +448,6 @@ if [[ -d $FNM_ROOT ]]; then
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
     fi
 fi
-export PHPENV_ROOT="$HOME/.phpenv"
-[[ -d $PHPENV_ROOT/bin ]] && export PATH="$PHPENV_ROOT/bin:$PATH"
-if command -v phpenv 1>/dev/null 2>&1; then
-    eval "$(phpenv init -)"
-fi
 export NVIM_ROOT="/opt/nvim"
 [[ -d $NVIM_ROOT/bin ]] && export PATH="$NVIM_ROOT/bin:$PATH"
 HISTFILE=~/.zsh_history
@@ -482,10 +461,10 @@ EOF
 }
 
 #-------------------------------#
-#  PYTHON, NODE AND PHP SETUP   #
+#     PYTHON AND NODE SETUP     #
 #-------------------------------#
 
-setup_python_node_php() {
+setup_python_node() {
     progress "Setting up Python $PYTHON_VERSION..."
     
     export PYENV_ROOT="$HOME/.pyenv"
@@ -497,8 +476,6 @@ setup_python_node_php() {
         if pyenv versions | grep -q "$PYTHON_VERSION"; then
             info "Python $PYTHON_VERSION already installed"
         else
-            progress "Installing Python $PYTHON_VERSION (this may take a while)..."
-            
             if [[ -d "$PYENV_ROOT/versions/$PYTHON_VERSION" ]]; then
                 rm -rf "$PYENV_ROOT/versions/$PYTHON_VERSION"
             fi
@@ -560,48 +537,6 @@ setup_python_node_php() {
         fi
     else
         warning "FNM not available for Node.js setup"
-    fi
-
-    progress "Setting up php $PHP_VERSION..."
-    
-    export PHPENV_ROOT="$HOME/.phpenv"
-    export PATH="$PHPENV_ROOT/bin:$PATH"
-    
-    if command -v phpenv &>/dev/null; then
-        
-        if phpenv versions | grep -q "$PHP_VERSION"; then
-            info "php $PHP_VERSION already installed"
-        else
-            progress "Installing php $PHP_VERSION (this may take a while)..."
-            
-            if [[ -d "$PHPENV_ROOT/versions/$PHP_VERSION" ]]; then
-                rm -rf "$PHPENV_ROOT/versions/$PHP_VERSION"
-            fi
-
-            export PHP_BUILD_SKIP_EXTENSIONS="xdebug"
-            export PHP_BUILD_CONFIGURE_OPTS="--disable-xdebug"
-            
-            if ! phpenv install "$PHP_VERSION" &>>"$LOG_FILE"; then
-                error "Failed to install php $PHP_VERSION. Check $LOG_FILE for details."
-            fi
-        fi
-        
-        if phpenv global "$PHP_VERSION" &>>"$LOG_FILE"; then
-            success "php $PHP_VERSION set as global version"
-        else
-            warning "Failed to set php $PHP_VERSION as global"
-        fi
-    else
-        warning "phpenv not available for php setup"
-    fi
-
-    if command -v pecl &>/dev/null; then
-        progress "Installing Xdebug via PECL..."
-        if pecl list | grep -q xdebug; then
-            success "Xdebug already installed"
-        else
-            pecl install xdebug &>>"$LOG_FILE" && success "Xdebug installed"
-        fi
     fi
 }
 
@@ -796,7 +731,7 @@ main() {
     install_dev_tools
     setup_oh_my_zsh
     create_zshrc
-    setup_python_node_php
+    setup_python_node
     verify_git_installation
     setup_ssh
     configure_git
