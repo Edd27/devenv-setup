@@ -578,7 +578,7 @@ setup_python_node_php() {
                 rm -rf "$PHPENV_ROOT/versions/$PHP_VERSION"
             fi
             
-            if ! phpenv install "$PHP_VERSION" &>>"$LOG_FILE"; then
+            if ! PHP_BUILD_SKIP_EXTENSIONS="xdebug" phpenv install "$PHP_VERSION" &>>"$LOG_FILE"; then
                 error "Failed to install php $PHP_VERSION. Check $LOG_FILE for details."
             fi
         fi
@@ -590,6 +590,15 @@ setup_python_node_php() {
         fi
     else
         warning "phpenv not available for php setup"
+    fi
+
+    if command -v pecl &>/dev/null; then
+        progress "Installing Xdebug via PECL..."
+        if pecl list | grep -q xdebug; then
+            success "Xdebug already installed"
+        else
+            pecl install xdebug &>>"$LOG_FILE" && success "Xdebug installed"
+        fi
     fi
 }
 
