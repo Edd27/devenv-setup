@@ -349,11 +349,11 @@ create_zshrc() {
 parse_git_branch() {
     git rev-parse --is-inside-work-tree &>/dev/null || return
     local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
-    echo "%F{red}($branch) %f"
+    echo " %F{red}on $branch%f"
 }
 print_node_version() {
     local version=$1
-    echo "%F{green}via Node.js $version %f"
+    echo " %F{green}via Node.js $version%f"
 }
 parse_node_version() {
     local dir="$PWD"
@@ -395,7 +395,7 @@ parse_node_version() {
     done
     return
 }
-export PROMPT='%F{green}%n@%m%f:%F{blue}%1~ $(parse_git_branch)$(parse_node_version)%f%(!.#.$) '
+export PROMPT='%F{green}%n@%m %F{blue}%1~$(parse_git_branch)$(parse_node_version) %f%(!.#.$) '
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
