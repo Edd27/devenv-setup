@@ -261,7 +261,7 @@ install_essentials() {
         libffi-dev liblzma-dev libgdbm-dev libnss3-dev libexpat1-dev
         fontconfig locales pkg-config gcc g++ libclang-dev libcurl4-openssl-dev
         libjpeg-dev libicu-dev lazygit fzf ripgrep fd-find libonig-dev libtidy-dev
-        libzip-dev libxslt1-dev libpng-dev libwebp-dev
+        libzip-dev libxslt1-dev libpng-dev libwebp-dev libglib2.0-0t64 libgl1
     )
 
     for package in "${packages[@]}"; do
