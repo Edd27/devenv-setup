@@ -314,6 +314,11 @@ setup_oh_my_zsh() {
         progress "Installing Oh My Zsh..."
         if git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh &>>"$LOG_FILE"; then
             success "Oh My Zsh installed"
+            if curl -sS https://starship.rs/install.sh | sh &>>"$LOG_FILE"; then
+                success "Starship installed"
+            else
+                error "Failed to install Starship"
+            fi
         else
             error "Failed to install Oh My Zsh"
         fi
@@ -346,74 +351,9 @@ create_zshrc() {
     progress "Creating ZSH configuration..."
 
     cat > "$ZSHRC_FILE" << 'EOF'
-parse_git_branch() {
-    git rev-parse --is-inside-work-tree &>/dev/null || return
-    local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
-    echo " %F{red}on $branch%f"
-}
-print_node_version() {
-    local version=$1
-    echo " %F{green}via Node.js $version%f"
-}
-parse_node_version() {
-    local dir="$PWD"
-    while [[ -n $dir && $dir != "/" ]]; do
-        if [[ -f "$dir/.nvmrc" ]]; then
-            local v=$(<"$dir/.nvmrc")
-            v=${v##v}
-            print_node_version "$v"
-            return
-        fi
-        if [[ -f "$dir/.node-version" ]]; then
-            local v=$(<"$dir/.node-version")
-            v=${v##v}
-            print_node_version "$v"
-            return
-        fi
-        if [[ -f "$dir/package.json" ]]; then
-            if command -v jq >/dev/null 2>&1; then
-                local v=$(jq -r '.engines.node // empty' "$dir/package.json")
-                if [[ -n $v ]]; then
-                    print_node_version "$v"
-                    return
-                fi
-            elif command -v node >/dev/null 2>&1; then
-                local v=$(node -e "try{const p=require('./package.json'); console.log((p.engines&&p.engines.node)||'') }catch(e){}" 2>/dev/null)
-                if [[ -n $v ]]; then
-                    print_node_version "$v"
-                    return
-                fi
-            fi
-            if command -v node >/dev/null 2>&1; then
-                local v=$(node -v 2>/dev/null)
-                v=${v##v}
-                print_node_version "$v"
-                return
-            fi
-        fi
-        dir=$(dirname "$dir")
-    done
-    return
-}
-export PROMPT='%F{green}%n@%m %F{blue}%1~$(parse_git_branch)$(parse_node_version) %f%(!.#.$) '
 export ZSH="$HOME/.oh-my-zsh"
-ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
 source "$ZSH/oh-my-zsh.sh"
-setopt auto_cd
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt inc_append_history
-setopt share_history
-cd() { 
-    builtin cd "$@" && ls -la --color=auto
-}
-alias ls="ls -la --color=auto"
-alias ll="ls -alF"
-alias la="ls -A"
-alias l="ls -CF"
-alias zshconfig="code ~/.zshrc"
-alias ohmyzsh="code ~/.oh-my-zsh"
 alias gpm="git push origin main"
 alias gpo="git push origin"
 alias gpl="git pull"
@@ -423,8 +363,6 @@ alias gcb="git checkout -b"
 alias gaa="git add ."
 alias gcm="git commit -m"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
@@ -438,11 +376,7 @@ if [[ -d $FNM_ROOT ]]; then
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
     fi
 fi
-HISTFILE=~/.zsh_history
-HISTFILE=~/.bash_history
-HISTSIZE=10000
-SAVEHIST=10000
-export BAT_THEME="TwoDark"
+eval "$(starship init zsh)"
 EOF
 
     success "ZSH configuration created"
