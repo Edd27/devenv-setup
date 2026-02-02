@@ -5,7 +5,7 @@ set -euo pipefail
 clear
 
 #-------------------------------#
-#         SETUP VARIABLES       #
+#          SETUP VARIABLES      #
 #-------------------------------#
 
 readonly PYTHON_VERSION="3"
@@ -22,7 +22,7 @@ readonly CYAN='\033[0;36m'
 readonly NC='\033[0m'
 
 #-------------------------------#
-#         HELPER FUNCTIONS      #
+#          HELPER FUNCTIONS     #
 #-------------------------------#
 
 log() {
@@ -106,7 +106,7 @@ validate_input() {
 }
 
 #-------------------------------#
-#          START BANNER         #
+#           START BANNER        #
 #-------------------------------#
 
 show_banner() {
@@ -122,7 +122,7 @@ show_banner() {
 }
 
 #-------------------------------#
-#          OS CHECK             #
+#           OS CHECK            #
 #-------------------------------#
 
 check_os() {
@@ -145,7 +145,7 @@ check_os() {
 }
 
 #-------------------------------#
-#     CHECK ZSH AS DEFAULT      #
+#      CHECK ZSH AS DEFAULT     #
 #-------------------------------#
 
 setup_zsh() {
@@ -184,7 +184,7 @@ setup_zsh() {
 }
 
 #-------------------------------#
-#      USER INFO FOR GIT        #
+#       USER INFO FOR GIT       #
 #-------------------------------#
 
 get_user_info() {
@@ -200,7 +200,7 @@ get_user_info() {
 }
 
 #-------------------------------#
-#       LOCALE SETUP            #
+#        LOCALE SETUP           #
 #-------------------------------#
 
 setup_locale() {
@@ -306,7 +306,7 @@ install_dev_tools() {
 }
 
 #-------------------------------#
-#     OH-MY-ZSH + PLUGINS       #
+#      OH-MY-ZSH + PLUGINS      #
 #-------------------------------#
 
 setup_oh_my_zsh() {
@@ -314,11 +314,6 @@ setup_oh_my_zsh() {
         progress "Installing Oh My Zsh..."
         if git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh &>>"$LOG_FILE"; then
             success "Oh My Zsh installed"
-            if curl -sS https://starship.rs/install.sh | sh &>>"$LOG_FILE"; then
-                success "Starship installed"
-            else
-                error "Failed to install Starship"
-            fi
         else
             error "Failed to install Oh My Zsh"
         fi
@@ -344,7 +339,27 @@ setup_oh_my_zsh() {
 }
 
 #-------------------------------#
-#       ZSH CONFIG FILE         #
+#        STARSHIP SETUP         #
+#-------------------------------#
+
+setup_starship() {
+    progress "Setting up Starship prompt..."
+
+    if check_command starship; then
+        success "Starship is already installed"
+        return 0
+    fi
+
+    if curl -sS https://starship.rs/install.sh | sh -s -- --yes &>>"$LOG_FILE"; then
+        success "Starship installed successfully"
+        mkdir -p "$HOME/.config"
+    else
+        error "Failed to install Starship"
+    fi
+}
+
+#-------------------------------#
+#        ZSH CONFIG FILE        #
 #-------------------------------#
 
 create_zshrc() {
@@ -354,6 +369,8 @@ create_zshrc() {
 export ZSH="$HOME/.oh-my-zsh"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
 source "$ZSH/oh-my-zsh.sh"
+
+# Aliases
 alias gpm="git push origin main"
 alias gpo="git push origin"
 alias gpl="git pull"
@@ -363,11 +380,15 @@ alias gcb="git checkout -b"
 alias gaa="git add ."
 alias gcm="git commit -m"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+# Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
+
+# FNM (Node.js)
 export FNM_ROOT="$HOME/.fnm"
 if [[ -d $FNM_ROOT ]]; then
     export PATH="$FNM_ROOT:$PATH"
@@ -376,6 +397,8 @@ if [[ -d $FNM_ROOT ]]; then
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
     fi
 fi
+
+# Starship init
 eval "$(starship init zsh)"
 EOF
 
@@ -383,7 +406,7 @@ EOF
 }
 
 #-------------------------------#
-#     PYTHON AND NODE SETUP     #
+#      PYTHON AND NODE SETUP    #
 #-------------------------------#
 
 setup_python_node() {
@@ -477,7 +500,7 @@ verify_git_installation() {
 }
 
 #-------------------------------#
-#          SSH SETUP            #
+#           SSH SETUP           #
 #-------------------------------#
 
 setup_ssh() {
@@ -532,7 +555,7 @@ EOF
 }
 
 #-------------------------------#
-#          GIT CONFIG           #
+#           GIT CONFIG          #
 #-------------------------------#
 
 configure_git() {
@@ -626,6 +649,7 @@ main() {
     install_essentials
     install_dev_tools
     setup_oh_my_zsh
+    setup_starship
     create_zshrc
     setup_python_node
     verify_git_installation
@@ -636,7 +660,7 @@ main() {
     success "🎉 Environment for development setup completed!"
     info "📝 Configuration summary:"
     info "   • Locale: en_US.UTF-8"
-    info "   • Shell: ZSH with Oh My Zsh"
+    info "   • Shell: ZSH with Oh My Zsh + Starship Prompt"
     info "   • Python: $PYTHON_VERSION (via pyenv)"
     info "   • Node.js: LTS (via fnm)"
     info "🔄 Please restart your terminal (on WSL) or your session (on Linux) to apply changes"
