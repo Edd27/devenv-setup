@@ -5,7 +5,7 @@ set -euo pipefail
 clear
 
 #-------------------------------#
-#          SETUP VARIABLES      #
+#         SETUP VARIABLES       #
 #-------------------------------#
 
 readonly PYTHON_VERSION="3"
@@ -22,7 +22,7 @@ readonly CYAN='\033[0;36m'
 readonly NC='\033[0m'
 
 #-------------------------------#
-#          HELPER FUNCTIONS     #
+#         HELPER FUNCTIONS      #
 #-------------------------------#
 
 log() {
@@ -106,7 +106,7 @@ validate_input() {
 }
 
 #-------------------------------#
-#           START BANNER        #
+#          START BANNER         #
 #-------------------------------#
 
 show_banner() {
@@ -122,7 +122,7 @@ show_banner() {
 }
 
 #-------------------------------#
-#           OS CHECK            #
+#          OS CHECK             #
 #-------------------------------#
 
 check_os() {
@@ -145,7 +145,7 @@ check_os() {
 }
 
 #-------------------------------#
-#      CHECK ZSH AS DEFAULT     #
+#     CHECK ZSH AS DEFAULT      #
 #-------------------------------#
 
 setup_zsh() {
@@ -184,7 +184,7 @@ setup_zsh() {
 }
 
 #-------------------------------#
-#       USER INFO FOR GIT       #
+#      USER INFO FOR GIT        #
 #-------------------------------#
 
 get_user_info() {
@@ -200,7 +200,7 @@ get_user_info() {
 }
 
 #-------------------------------#
-#        LOCALE SETUP           #
+#       LOCALE SETUP            #
 #-------------------------------#
 
 setup_locale() {
@@ -306,7 +306,7 @@ install_dev_tools() {
 }
 
 #-------------------------------#
-#      OH-MY-ZSH + PLUGINS      #
+#     OH-MY-ZSH + PLUGINS       #
 #-------------------------------#
 
 setup_oh_my_zsh() {
@@ -339,320 +339,81 @@ setup_oh_my_zsh() {
 }
 
 #-------------------------------#
-#        STARSHIP SETUP         #
-#-------------------------------#
-
-setup_starship() {
-    progress "Setting up Starship prompt..."
-
-    if check_command starship; then
-        success "Starship is already installed"
-        return 0
-    fi
-
-    if curl -sS https://starship.rs/install.sh | sh -s -- --yes &>>"$LOG_FILE"; then
-        success "Starship installed successfully"
-        mkdir -p "$HOME/.config" && touch "$HOME/.config/starship.toml"
-        cat > "$HOME/.config/starship.toml" << 'EOF'
-"$schema" = 'https://starship.rs/config-schema.json'
-
-[aws]
-format = '\[[$symbol($profile)(\($region\))(\[$duration\])]($style)\]'
-
-[azure]
-format = '\[[$symbol($subscription)]($style)\]'
-
-[battery]
-format = '\[[$symbol$percentage]($style)\]'
-
-[buf]
-format = '\[[$symbol($version)]($style)\]'
-
-[bun]
-format = '\[[$symbol($version)]($style)\]'
-
-[c]
-format = '\[[$symbol($version(-$name))]($style)\]'
-
-[cmake]
-format = '\[[$symbol($version)]($style)\]'
-
-[cmd_duration]
-format = '\[[⏱ $duration]($style)\]'
-
-[cobol]
-format = '\[[$symbol($version)]($style)\]'
-
-[conda]
-format = '\[[$symbol$environment]($style)\]'
-
-[container]
-format = '\[[$symbol \[$name\]]($style)\]'
-
-[cpp]
-format = '\[[$symbol($version(-$name))]($style)\]'
-
-[crystal]
-format = '\[[$symbol($version)]($style)\]'
-
-[daml]
-format = '\[[$symbol($version)]($style)\]'
-
-[dart]
-format = '\[[$symbol($version)]($style)\]'
-
-[deno]
-format = '\[[$symbol($version)]($style)\]'
-
-[direnv]
-format = '\[[$symbol$loaded/$allowed]($style)\]'
-
-[docker_context]
-format = '\[[$symbol$context]($style)\]'
-
-[dotnet]
-format = '\[[$symbol($version)(🎯 $tfm)]($style)\]'
-
-[elixir]
-format = '\[[$symbol($version \(OTP $otp_version\))]($style)\]'
-
-[elm]
-format = '\[[$symbol($version)]($style)\]'
-
-[erlang]
-format = '\[[$symbol($version)]($style)\]'
-
-[fennel]
-format = '\[[$symbol($version)]($style)\]'
-
-[fortran]
-format = '\[[$symbol($version)]($style)\]'
-
-[fossil_branch]
-format = '\[[$symbol$branch]($style)\]'
-
-[fossil_metrics]
-format = '\[[+$added]($added_style)\]\[[-$deleted]($deleted_style)\]'
-
-[gcloud]
-format = '\[[$symbol$account(@$domain)(\($region\))]($style)\]'
-
-[git_branch]
-format = '\[[$symbol$branch]($style)\]'
-
-[git_commit]
-format = '\[[\($hash$tag\)]($style)\]'
-
-[git_metrics]
-format = '\[[+$added]($added_style)\]\[[-$deleted]($deleted_style)\]'
-
-[git_state]
-format = '\[[$state ($progress_current/$progress_total)]($style)\]'
-
-[git_status]
-format = '([\[$all_status$ahead_behind\]]($style))'
-
-[gleam]
-format = '\[[$symbol($version)]($style)\]'
-
-[golang]
-format = '\[[$symbol($version)]($style)\]'
-
-[gradle]
-format = '\[[$symbol($version)]($style)\]'
-
-[guix_shell]
-format = '\[[$symbol]($style)\]'
-
-[haskell]
-format = '\[[$symbol($version)]($style)\]'
-
-[haxe]
-format = '\[[$symbol($version)]($style)\]'
-
-[helm]
-format = '\[[$symbol($version)]($style)\]'
-
-[hg_branch]
-format = '\[[$symbol$branch]($style)\]'
-
-[hostname]
-format = '\[[$ssh_symbol($hostname)]($style)\] '
-
-[java]
-format = '\[[$symbol($version)]($style)\]'
-
-[jobs]
-format = '\[[$symbol$number]($style)\]'
-
-[julia]
-format = '\[[$symbol($version)]($style)\]'
-
-[kotlin]
-format = '\[[$symbol($version)]($style)\]'
-
-[kubernetes]
-format = '\[[$symbol$context( \($namespace\))]($style)\]'
-
-[localip]
-format = '\[[$localipv4]($style)\]'
-
-[lua]
-format = '\[[$symbol($version)]($style)\]'
-
-[memory_usage]
-format = '\[$symbol[$ram( | $swap)]($style)\]'
-
-[meson]
-format = '\[[$symbol$project]($style)\]'
-
-[mise]
-format = '\[[$symbol$health]($style)\]'
-
-[mojo]
-format = '\[[$symbol($version)]($style)\]'
-
-[nats]
-format = '\[[$symbol$name]($style)\]'
-
-[netns]
-format = '\[[$symbol \[$name\]]($style)\]'
-
-[nim]
-format = '\[[$symbol($version)]($style)\]'
-
-[nix_shell]
-format = '\[[$symbol$state( \($name\))]($style)\]'
-
-[nodejs]
-format = '\[[$symbol($version)]($style)\]'
-
-[ocaml]
-format = '\[[$symbol($version)(\($switch_indicator$switch_name\))]($style)\]'
-
-[odin]
-format = '\[[$symbol($version )]($style)\]'
-
-[opa]
-format = '\[[$symbol($version)]($style)\]'
-
-[openstack]
-format = '\[[$symbol$cloud(\($project\))]($style)\]'
-
-[os]
-format = '\[[$symbol]($style)\]'
-
-[package]
-format = '\[[$symbol$version]($style)\]'
-
-[perl]
-format = '\[[$symbol($version)]($style)\]'
-
-[php]
-format = '\[[$symbol($version)]($style)\]'
-
-[pijul_channel]
-format = '\[[$symbol$channel]($style)\]'
-
-[pixi]
-format = '\[[$symbol$version( $environment)]($style)\]'
-
-[pulumi]
-format = '\[[$symbol$stack]($style)\]'
-
-[purescript]
-format = '\[[$symbol($version)]($style)\]'
-
-[python]
-format = '\[[${symbol}${pyenv_prefix}(${version})(\($virtualenv\))]($style)\]'
-
-[quarto]
-format = '\[[$symbol($version)]($style)\]'
-
-[raku]
-format = '\[[$symbol($version-$vm_version)]($style)\]'
-
-[red]
-format = '\[[$symbol($version)]($style)\]'
-
-[rlang]
-format = '\[[$symbol($version)]($style)\]'
-
-[ruby]
-format = '\[[$symbol($version)]($style)\]'
-
-[rust]
-format = '\[[$symbol($version)]($style)\]'
-
-[scala]
-format = '\[[$symbol($version)]($style)\]'
-
-[shell]
-format = '\[[$indicator]($style)\]'
-
-[singularity]
-format = '\[[$symbol\[$env\]]($style)\]'
-
-[solidity]
-format = '\[[$symbol($version)]($style)\]'
-
-[spack]
-format = '\[[$symbol$environment]($style)\]'
-
-[status]
-format = '\[[$symbol$status]($style)\]'
-
-[sudo]
-format = '\[[as $symbol]($style)\]'
-
-[swift]
-format = '\[[$symbol($version)]($style)\]'
-
-[terraform]
-format = '\[[$symbol$workspace]($style)\]'
-
-[time]
-format = '\[[$time]($style)\]'
-
-[typst]
-format = '\[[$symbol($version)]($style)\]'
-
-[username]
-format = '\[[$user]($style)\]'
-
-[vagrant]
-format = '\[[$symbol($version)]($style)\]'
-
-[vcsh]
-format = '\[vcsh [$symbol$repo]($style)\]'
-
-[vlang]
-format = '\[[$symbol($version)]($style)\]'
-
-[xmake]
-format = '\[[$symbol($version)]($style)\]'
-
-[zig]
-format = '\[[$symbol($version)]($style)\]'
-EOF   
-    else
-        error "Failed to install Starship"
-    fi
-}
-
-#-------------------------------#
-#        ZSH CONFIG FILE        #
+#       ZSH CONFIG FILE         #
 #-------------------------------#
 
 create_zshrc() {
     progress "Creating ZSH configuration..."
 
     cat > "$ZSHRC_FILE" << 'EOF'
+parse_git_branch() {
+    git rev-parse --is-inside-work-tree &>/dev/null || return
+    local branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+    echo " %F{red}on $branch%f"
+}
+print_node_version() {
+    local version=$1
+    echo " %F{green}via Node.js $version%f"
+}
+parse_node_version() {
+    local dir="$PWD"
+    while [[ -n $dir && $dir != "/" ]]; do
+        if [[ -f "$dir/.nvmrc" ]]; then
+            local v=$(<"$dir/.nvmrc")
+            v=${v##v}
+            print_node_version "$v"
+            return
+        fi
+        if [[ -f "$dir/.node-version" ]]; then
+            local v=$(<"$dir/.node-version")
+            v=${v##v}
+            print_node_version "$v"
+            return
+        fi
+        if [[ -f "$dir/package.json" ]]; then
+            if command -v jq >/dev/null 2>&1; then
+                local v=$(jq -r '.engines.node // empty' "$dir/package.json")
+                if [[ -n $v ]]; then
+                    print_node_version "$v"
+                    return
+                fi
+            elif command -v node >/dev/null 2>&1; then
+                local v=$(node -e "try{const p=require('./package.json'); console.log((p.engines&&p.engines.node)||'') }catch(e){}" 2>/dev/null)
+                if [[ -n $v ]]; then
+                    print_node_version "$v"
+                    return
+                fi
+            fi
+            if command -v node >/dev/null 2>&1; then
+                local v=$(node -v 2>/dev/null)
+                v=${v##v}
+                print_node_version "$v"
+                return
+            fi
+        fi
+        dir=$(dirname "$dir")
+    done
+    return
+}
+export PROMPT='%F{green}%n@%m %F{blue}%1~$(parse_git_branch)$(parse_node_version) %f%(!.#.$) '
 export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME=""
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
 source "$ZSH/oh-my-zsh.sh"
-
-# Aliases
+setopt auto_cd
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt inc_append_history
+setopt share_history
+cd() { 
+    builtin cd "$@" && ls -la --color=auto
+}
+alias ls="ls -la --color=auto"
+alias ll="ls -alF"
+alias la="ls -A"
+alias l="ls -CF"
+alias zshconfig="code ~/.zshrc"
+alias ohmyzsh="code ~/.oh-my-zsh"
 alias gpm="git push origin main"
 alias gpo="git push origin"
 alias gpl="git pull"
@@ -662,15 +423,13 @@ alias gcb="git checkout -b"
 alias gaa="git add ."
 alias gcm="git commit -m"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-
-# Pyenv
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
     eval "$(pyenv init -)"
 fi
-
-# FNM (Node.js)
 export FNM_ROOT="$HOME/.fnm"
 if [[ -d $FNM_ROOT ]]; then
     export PATH="$FNM_ROOT:$PATH"
@@ -679,17 +438,18 @@ if [[ -d $FNM_ROOT ]]; then
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
     fi
 fi
-
-# Starship
-eval "$(starship init zsh)"
-export STARSHIP_CONFIG="$HOME/.config/starship.toml"
+HISTFILE=~/.zsh_history
+HISTFILE=~/.bash_history
+HISTSIZE=10000
+SAVEHIST=10000
+export BAT_THEME="TwoDark"
 EOF
 
     success "ZSH configuration created"
 }
 
 #-------------------------------#
-#      PYTHON AND NODE SETUP    #
+#     PYTHON AND NODE SETUP     #
 #-------------------------------#
 
 setup_python_node() {
@@ -783,7 +543,7 @@ verify_git_installation() {
 }
 
 #-------------------------------#
-#           SSH SETUP           #
+#          SSH SETUP            #
 #-------------------------------#
 
 setup_ssh() {
@@ -838,7 +598,7 @@ EOF
 }
 
 #-------------------------------#
-#           GIT CONFIG          #
+#          GIT CONFIG           #
 #-------------------------------#
 
 configure_git() {
@@ -932,7 +692,6 @@ main() {
     install_essentials
     install_dev_tools
     setup_oh_my_zsh
-    setup_starship
     create_zshrc
     setup_python_node
     verify_git_installation
@@ -943,7 +702,7 @@ main() {
     success "🎉 Environment for development setup completed!"
     info "📝 Configuration summary:"
     info "   • Locale: en_US.UTF-8"
-    info "   • Shell: ZSH with Oh My Zsh + Starship Prompt"
+    info "   • Shell: ZSH with Oh My Zsh"
     info "   • Python: $PYTHON_VERSION (via pyenv)"
     info "   • Node.js: LTS (via fnm)"
     info "🔄 Please restart your terminal (on WSL) or your session (on Linux) to apply changes"
