@@ -634,7 +634,7 @@ format = '\[[$symbol($version)]($style)\]'
 
 [zig]
 format = '\[[$symbol($version)]($style)\]'
-EOF   
+EOF
     else
         error "Failed to install Starship"
     fi
