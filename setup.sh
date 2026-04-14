@@ -357,10 +357,12 @@ create_zshrc() {
 
     cat > "$ZSHRC_FILE" << 'EOF'
 export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="robbyrussell"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
 source "$ZSH/oh-my-zsh.sh"
 
 # Aliases
+alias ll="ls -lA"
 alias gpm="git push origin main"
 alias gpo="git push origin"
 alias gpl="git pull"
@@ -388,6 +390,7 @@ if [[ -d $FNM_ROOT ]]; then
     fi
 fi
 
+# JENV (Java)
 export JENV_ROOT="$HOME/.jenv"
 if [[ -d $JENV_ROOT/bin ]]; then
     export PATH="$JENV_ROOT/bin:$PATH"
@@ -661,7 +664,7 @@ main() {
     success "🎉 Environment for development setup completed!"
     info "📝 Configuration summary:"
     info "   • Locale: en_US.UTF-8"
-    info "   • Shell: ZSH + Oh My Zsh"
+    info "   • Shell: ZSH with Oh My Zsh"
     info "   • Python: $PYTHON_VERSION (via pyenv)"
     info "   • Node.js: LTS (via fnm)"
     info "🔄 Please restart your terminal (on WSL) or your session (on Linux) to apply changes"
