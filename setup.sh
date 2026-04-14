@@ -11,7 +11,7 @@ clear
 readonly PYTHON_VERSION="3"
 readonly ZSHRC_FILE="$HOME/.zshrc"
 readonly SCRIPT_NAME="$(basename "$0")"
-readonly GITHUB_SSH_KEY_NAME="github_personal"
+readonly GIT_SSH_KEY_NAME="git"
 readonly LOG_FILE="/tmp/devenv_setup_$(date +%Y%m%d_%H%M%S).log"
 
 readonly RED='\033[0;31m'
@@ -188,11 +188,11 @@ setup_zsh() {
 #-------------------------------#
 
 get_user_info() {
-    echo -n "Enter your complete name: "
+    echo -n "🧑 Enter your complete name: "
     read -r git_complete_name
     git_complete_name=$(validate_input "$git_complete_name" "Developer")
 
-    echo -n "Enter your email: "
+    echo -n "📧 Enter your email: "
     read -r user_email
     user_email=$(validate_input "$user_email" "developer@example.com")
 
@@ -260,7 +260,7 @@ install_essentials() {
         libncursesw5-dev libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev
         libffi-dev liblzma-dev libgdbm-dev libnss3-dev libexpat1-dev
         fontconfig locales pkg-config gcc g++ libclang-dev libcurl4-openssl-dev
-        libjpeg-dev libicu-dev lazygit fzf ripgrep fd-find libonig-dev libtidy-dev
+        libjpeg-dev libicu-dev fzf ripgrep fd-find libonig-dev libtidy-dev
         libzip-dev libxslt1-dev libpng-dev libwebp-dev libglib2.0-0t64 libgl1
     )
 
@@ -285,23 +285,33 @@ install_dev_tools() {
 
     if [[ ! -d "$HOME/.pyenv" ]]; then
         if curl -fsSL https://pyenv.run | bash &>>"$LOG_FILE"; then
-            success "pyenv installed"
+            success "PYENV installed"
         else
-            warning "Failed to install pyenv"
+            warning "Failed to install PYENV"
         fi
     else
-        success "pyenv already installed"
+        success "PYENV already installed"
     fi
     
     if [[ ! -d "$HOME/.fnm" ]]; then
         if curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.fnm" --skip-shell &>>"$LOG_FILE"; then
             sed -i 's|eval "`fnm env`"|eval "`fnm env --use-on-cd --version-file-strategy=recursive --shell zsh`"|' "$ZSHRC_FILE"
-            success "fnm installed"
+            success "FNM installed"
         else
-            warning "Failed to install fnm"
+            warning "Failed to install FNM"
         fi
     else
-        success "fnm already installed"
+        success "FNM already installed"
+    fi
+
+    if [[ ! -d "$HOME/.jenv" ]]; then
+        if git clone https://github.com/jenv/jenv.git "$HOME/.jenv" &>>"$LOG_FILE"; then
+            success "JENV installed"
+        else
+            warning "Failed to install JENV"
+        fi
+    else
+        success "JENV already installed"
     fi
 }
 
@@ -312,7 +322,7 @@ install_dev_tools() {
 setup_oh_my_zsh() {
     if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
         progress "Installing Oh My Zsh..."
-        if git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh &>>"$LOG_FILE"; then
+        if git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh" &>>"$LOG_FILE"; then
             success "Oh My Zsh installed"
         else
             error "Failed to install Oh My Zsh"
@@ -363,7 +373,7 @@ alias gaa="git add ."
 alias gcm="git commit -m"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
-# Pyenv
+# PYENV (Python)
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
@@ -374,9 +384,18 @@ fi
 export FNM_ROOT="$HOME/.fnm"
 if [[ -d $FNM_ROOT ]]; then
     export PATH="$FNM_ROOT:$PATH"
-    eval "$("$FNM_ROOT/fnm" env --use-on-cd --version-file-strategy=recursive --shell zsh)"
     if command -v fnm 1>/dev/null 2>&1; then
+        eval "$("$FNM_ROOT/fnm" env --use-on-cd --version-file-strategy=recursive --shell zsh)"
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
+    fi
+fi
+
+# JENV (Java)
+export JENV_ROOT="$HOME/.jenv"
+if [[ -d $JENV_ROOT/bin ]]; then
+    export PATH="$JENV_ROOT/bin:$PATH"
+    if command -v jenv 1>/dev/null 2>&1; then
+        eval "$(jenv init -)"
     fi
 fi
 EOF
@@ -384,9 +403,9 @@ EOF
     success "ZSH configuration created"
 }
 
-#-------------------------------#
-#      PYTHON AND NODE SETUP    #
-#-------------------------------#
+#---------------------------#
+#   PYTHON AND NODE SETUP   #
+#---------------------------#
 
 setup_python_node() {
     progress "Setting up Python $PYTHON_VERSION..."
@@ -488,7 +507,7 @@ setup_ssh() {
     mkdir -p ~/.ssh
     chmod 700 ~/.ssh
 
-    local ssh_key_path="$HOME/.ssh/$GITHUB_SSH_KEY_NAME"
+    local ssh_key_path="$HOME/.ssh/$GIT_SSH_KEY_NAME"
 
     if [[ ! -f "$ssh_key_path" ]]; then
         if ssh-keygen -t ed25519 -C "$user_email" -f "$ssh_key_path" -N "" &>>"$LOG_FILE"; then
@@ -511,12 +530,17 @@ setup_ssh() {
     fi
 
     cat > ~/.ssh/config << EOF
-# Github
 Host github.com
   HostName github.com
   PreferredAuthentications publickey
   AddKeysToAgent yes
-  IdentityFile ~/.ssh/$GITHUB_SSH_KEY_NAME
+  IdentityFile ~/.ssh/$GIT_SSH_KEY_NAME
+
+Host bitbucket.org
+  HostName bitbucket.org
+  PreferredAuthentications publickey
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/$GIT_SSH_KEY_NAME
 EOF
 
     chmod 600 ~/.ssh/config
@@ -524,7 +548,7 @@ EOF
 
     if check_command xclip; then
         if xclip -selection clipboard < "${ssh_key_path}.pub"; then
-            success "SSH key copied to clipboard — paste it in GitHub"
+            success "SSH key copied to clipboard — paste it in GitHub or Bitbucket"
         else
             warning "Failed to copy SSH key to clipboard"
         fi
@@ -570,6 +594,8 @@ out/
 .vscode/
 .cursor/
 .idea/
+.kiro/
+.amazonq/
 
 # OS
 .DS_Store
