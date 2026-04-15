@@ -304,14 +304,14 @@ install_dev_tools() {
         success "FNM already installed"
     fi
 
-    if [[ ! -d "$HOME/.jenv" ]]; then
-        if git clone https://github.com/jenv/jenv.git "$HOME/.jenv" &>>"$LOG_FILE"; then
-            success "JENV installed"
+    if [[ ! -d "$HOME/.sdkman" ]]; then
+        if curl -s "https://get.sdkman.io?ci=true" | bash &>>"$LOG_FILE"; then
+            success "SDKMAN installed"
         else
-            warning "Failed to install JENV"
+            warning "Failed to install SDKMAN"
         fi
     else
-        success "JENV already installed"
+        success "SDKMAN already installed"
     fi
 }
 
@@ -387,15 +387,6 @@ if [[ -d $FNM_ROOT ]]; then
     if command -v fnm 1>/dev/null 2>&1; then
         eval "$("$FNM_ROOT/fnm" env --use-on-cd --version-file-strategy=recursive --shell zsh)"
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
-    fi
-fi
-
-# JENV (Java)
-export JENV_ROOT="$HOME/.jenv"
-if [[ -d $JENV_ROOT/bin ]]; then
-    export PATH="$JENV_ROOT/bin:$PATH"
-    if command -v jenv 1>/dev/null 2>&1; then
-        eval "$(jenv init -)"
     fi
 fi
 EOF
