@@ -389,6 +389,10 @@ if [[ -d $FNM_ROOT ]]; then
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
     fi
 fi
+
+# SDKMAN
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 EOF
 
     success "ZSH configuration created"
