@@ -313,6 +313,17 @@ install_dev_tools() {
     else
         success "SDKMAN already installed"
     fi
+
+    if [[ ! -d "$HOME/.cargo" ]]; then
+        if curl https://sh.rustup.rs -sSf | sh -s -- -y &>>"$LOG_FILE"; then
+            success "CARGO installed"
+        else
+            warning "Failed to install CARGO"
+        fi
+    else
+        success "CARGO already installed"
+    fi
+
 }
 
 #-------------------------------#
@@ -374,6 +385,8 @@ alias gcb="git checkout -b"
 alias gaa="git add ."
 alias gcm="git commit -m"
 alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+alias l="erd"
+alias ls="erd"
 
 # PYENV (Python)
 export PYENV_ROOT="$HOME/.pyenv"
@@ -395,6 +408,10 @@ fi
 # SDKMAN (Java)
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+
+# CARGO (Rust)
+export CARGO_ROOT="$HOME/.cargo"
+[[ -d "$CARGO_ROOT/bin" ]] && export PATH="$CARGO_ROOT/bin:$PATH"
 EOF
 
     success "ZSH configuration created"
