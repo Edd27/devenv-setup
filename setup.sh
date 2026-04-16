@@ -338,6 +338,7 @@ setup_oh_my_zsh() {
         "zsh-syntax-highlighting https://github.com/zsh-users/zsh-syntax-highlighting.git"
         "you-should-use https://github.com/MichaelAquilina/zsh-you-should-use.git"
         "zsh-bat https://github.com/fdellwing/zsh-bat.git"
+        "zsh-completions https://github.com/zsh-users/zsh-completions.git"
     )
     
     for plugin_info in "${plugins[@]}"; do
@@ -357,8 +358,9 @@ create_zshrc() {
 
     cat > "$ZSHRC_FILE" << 'EOF'
 export ZSH="$HOME/.oh-my-zsh"
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=5"
 ZSH_THEME="robbyrussell"
-plugins=(git zsh-autosuggestions zsh-syntax-highlighting you-should-use zsh-bat)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions you-should-use zsh-bat)
 source "$ZSH/oh-my-zsh.sh"
 
 # Aliases
@@ -389,6 +391,10 @@ if [[ -d $FNM_ROOT ]]; then
         fnm use --install-if-missing lts-latest 1>/dev/null 2>&1 || true
     fi
 fi
+
+# SDKMAN (Java)
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 EOF
 
     success "ZSH configuration created"
