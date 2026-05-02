@@ -375,18 +375,8 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions you-sho
 source "$ZSH/oh-my-zsh.sh"
 
 # Aliases
-alias ll="ls -lA"
-alias gpm="git push origin main"
-alias gpo="git push origin"
-alias gpl="git pull"
-alias gst="git status"
-alias gco="git checkout"
-alias gcb="git checkout -b"
-alias gaa="git add ."
-alias gcm="git commit -m"
-alias glg="git log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
-alias l="erd"
 alias ls="erd"
+alias l="ls"
 
 # PYENV (Python)
 export PYENV_ROOT="$HOME/.pyenv"
